@@ -1,0 +1,81 @@
+void			ft_bzero(void *s, size_t n);
+
+ //borra n bytes de memoria escribiendo \0 en este area.
+size_t			ft_strlen(const char *s);
+
+ //mide el tamaño de una cadena.
+int				ft_isalpha(int c);
+
+ //busca el caracter pasado como parametro, retorna 1 true, 0 false.
+int				ft_isdigit(int c);
+
+ //busca el digito (0 a 9) pasado como parametro, retorna 1 true, 0 false.
+int				ft_isalnum(int c);
+
+ //busca un caracter alfanumerico pasado como parametro, retorna 1 true, 0 false.
+int				ft_isascii(int c);
+
+ //comprueba si c es un valor de carácter sin signo de 7 bits que se ajusta al conjunto de caracteres ASCII.
+int				ft_isprint(int c);
+
+ //comprueba cualquier carácter imprimible, incluido el espacio.
+int				ft_toupper(int c);
+
+ //convierte la letra c pasada como parametro a mayúsculas, si es posible.
+int				ft_tolower(int c);
+
+ //convierte la letra c pasada como parametro a minúsculas, si es posible.
+char			*ft_strchr(const char *s, int c);
+
+ //devuelve un puntero a la primera aparición del caracter c en la cadena s.
+char			*ft_strrchr(const char *s, int c);
+
+ //devuelve un puntero a la última aparición del caracter c en la cadena s.
+int				ft_strncmp(const  char *s1, const char *s2, size_t n);
+
+ // compara dos cadenas pasadas como parametro n bytes como maximo, retorna la diferencia entre los dos primeros caracteres diferentes encontrados.
+unsigned long	ft_strlcpy(char *dst, const char *src, size_t destsize);
+
+ //copia hasta tamaño - 1 caracteres de la cadena terminada en NUL src a dst , terminando en NUL el resultado. devuelve la longitud total de la cadena que intentaron crear (longitud src).
+size_t			ft_strlcat(char *dst, const char *src, size_t dstsize);
+
+ //agrega la cadena src terminada en NUL al final de dst. Agregará como máximo tamaño - strlen (dst) - 1 bytes, terminando en NUL el resultado. devuelve la longitud total de la cadena que intentaron crear (longitud src + dst).
+char			*ft_strnstr(const char *haystack, const char *needle, size_t len);
+
+ //busca la cadena needle en la otra haystack durante un tamaño maximo len. Retorna haystack desde que se encontro lo similitud.
+int				ft_atoi(const char *str);
+
+ //limpia una cadena de caracteres retornando el primer valor numerico aparecido en esta en forma de int. En este caso solo acepta un signo si aparece justo antes del valor numerico, si no retorna 0.
+void			*ft_memset(void *b, int c, size_t len);
+
+ //llena los primeros n bytes del área de memoria señalada por s con el byte constante c. Devuelve un puntero al area de memoria s.
+void			*ft_memcpy(void *dst, const void *src, size_t n);
+
+ //copia n bytes del área de memoria src al área de memoria dest . Las áreas de memoria no deben solaparse. devuelve un puntero a dest.
+void			*ft_memccpy(void *dst, const void *src, int c, size_t n);
+
+ //no copia más de n bytes del área de memoria src al área de memoria dest, deteniéndose cuando se encuentra el carácter c. devuelve un puntero al siguiente carácter en dest después de c, o NULL si no se encontró c en los primeros n caracteres de src.
+void			*ft_memmove(void *dst, const void *src, size_t len);
+
+ //opia n bytes del área de memoria src al área de memoria dest . Las áreas de memoria pueden superponerse: la copia se realiza como si los bytes en src se copiaran primero en una matriz temporal que no se superpone a src o dest, y los bytes se copian de la matriz temporal a dest. devuelve un puntero a dest.
+void			*ft_memchr(const void *s, int c, size_t n);
+
+ //escanea los n bytes iniciales del área de memoria señalada por s para la primera instancia de c . Tanto c como los bytes del área de memoria señalados por s se interpretan como caracteres sin signo. devuelve un puntero al byte correspondiente o NULL si el carácter no aparece en el área de memoria dada.
+int				ft_memcmp(const void *s1, const void *s2, size_t n);
+
+ //compara los primeros n bytes (cada uno interpretado como un carácter sin signo ) de las áreas de memoria s1 y s2. evuelve un número entero menor que, igual o mayor que cero si se encuentra que los primeros n bytes de s1 , respectivamente, son menores, coinciden o son mayores que los primeros n bytes de s2.
+void			*ft_calloc(size_t count, size_t size);
+
+ //asigna memoria para una matriz de tamaño count*size y la rellena de 0. devuelve un puntero a la memoria asignada que está alineado adecuadamente para cualquier tipo de variable
+char			*ft_strdup(const char *s1);
+
+ // La función strdup () devuelve un puntero a una nueva cadena que es un duplicado de la cadena s1. Decuelve un puntero a la cadena duplicada. 
+char			*ft_substr(char const *s, unsigned int start, size_t len);
+
+ //Reserva memoria (con malloc(3)) para la cadena de caracteres que va a devolver, y que proviene de la cadena pasada como argumento. Esta nueva cadena comienza en el índice ’start’ y tiene como tamaño máximo ’len’
+char			*ft_strjoin(char const *s1, char const *s2);
+
+ // Reserva memoria (con malloc(3)) para la cadena de caracteres que va a devolver, y que resulta de la concatenación de s1 y s2
+char			*ft_strtrim(char const *s1, char const *set);
+
+ // Reserva memoria (con malloc(3)) para la cadena de caracteres que va a devolver, que es una copia de la cadena de caracteres pasada como argumento, sin los caracteres indicados en el set pasado como argumento al principio y al final de la cadena de caracteres.
