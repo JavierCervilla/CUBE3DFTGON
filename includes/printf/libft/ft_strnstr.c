@@ -3,39 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gmartin- <gmartin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/19 01:12:41 by jcervill          #+#    #+#             */
-/*   Updated: 2019/11/19 01:12:52 by jcervill         ###   ########.fr       */
+/*   Created: 2019/11/08 10:55:29 by gmartin-          #+#    #+#             */
+/*   Updated: 2019/11/18 12:54:40 by gmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnstr(const char *s1, const char *s2, size_t n)
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
-	size_t			i;
-	char			*j;
-	char			*k;
+	size_t	i;
+	char	*aux1;
+	char	*aux2;
 
-	if (!*s2)
-		return ((char *)s1);
-	while (n-- && *s1)
+	if (!*needle)
+		return ((char *)haystack);
+	while (len-- && *haystack)
 	{
-		if (*s1 == *s2)
+		if (*haystack == *needle)
 		{
-			i = n;
-			j = (char *)s1 + 1;
-			k = (char *)s2 + 1;
-			while (i-- && *j && *k && *j == *k)
+			i = len;
+			aux1 = (char *)haystack + 1;
+			aux2 = (char *)needle + 1;
+			while (i-- && *aux1 && *aux2 && *aux1 == *aux2)
 			{
-				++j;
-				++k;
+				++aux1;
+				++aux2;
 			}
-			if (!*k)
-				return ((char *)s1);
+			if (!*aux2)
+				return ((char *)haystack);
 		}
-		++s1;
+		++haystack;
 	}
 	return (NULL);
 }

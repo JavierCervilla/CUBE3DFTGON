@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dgomez <dgomez@student.42madrid.com>       +#+  +:+       +#+         #
+#    By: gmartin- <gmartin-@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/03/10 01:32:21 by dgomez            #+#    #+#              #
-#    Updated: 2020/03/10 05:57:51 by dgomez           ###   ########.fr        #
+#    Created: 2020/06/08 12:07:39 by gmartin-          #+#    #+#              #
+#    Updated: 2020/06/08 13:44:48 by gmartin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ INC_DIR		=	./includes/
 PRINTF_DIR 	=	$(INC_DIR)printf/
 
 #MLX_DIR		=	$(INC_DIR)mlx/
-MLX_DIR		=	/home/javi/minilibx
+MLX_DIR		=	/home/zalillo/Documentos/cub3d/minilibx  #TODO :tengo referenciada la mlx que tengo fuera
 CC			=	gcc
 FLAGS		=	-c -Wall -Wextra -Werror
 

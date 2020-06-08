@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gmartin- <gmartin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/24 13:58:37 by jcervill          #+#    #+#             */
-/*   Updated: 2019/11/24 14:19:54 by jcervill         ###   ########.fr       */
+/*   Created: 2019/11/18 16:12:52 by gmartin-          #+#    #+#             */
+/*   Updated: 2019/11/18 17:23:21 by gmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,22 @@
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	size_t		i;
-	char		*aux;
+	size_t			len;
+	unsigned int	x;
+	char			*aux;
 
-	i = 1;
-	if (s && f)
+	x = 0;
+	if (s == NULL)
+		return (NULL);
+	len = ft_strlen(s);
+	aux = (char*)malloc(sizeof(char) * (len + 1));
+	if (aux == NULL)
+		return (NULL);
+	while (s[x])
 	{
-		i += ft_strlen(s);
-		if (!(aux = (char*)malloc(sizeof(char) * i)))
-			return (NULL);
-		i = 0;
-		while (s[i])
-		{
-			aux[i] = (char)s[i];
-			i++;
-		}
-		aux[i] = 0;
-		i = 0;
-		while (aux[i])
-		{
-			aux[i] = f(i, aux[i]);
-			i++;
-		}
-		return (aux);
+		aux[x] = f(x, s[x]);
+		x++;
 	}
-	return (NULL);
+	aux[x] = '\0';
+	return (aux);
 }

@@ -3,73 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gmartin- <gmartin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/22 09:44:36 by jcervill          #+#    #+#             */
-/*   Updated: 2020/01/22 09:46:08 by jcervill         ###   ########.fr       */
+/*   Created: 2019/12/12 18:54:55 by gmartin-          #+#    #+#             */
+/*   Updated: 2020/01/06 18:08:12 by gmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
-# include <stdio.h>
-# include <stdarg.h>
-# include <unistd.h>
+
 # include <stdlib.h>
+# include <stdio.h>
+# include <string.h>
+# include <unistd.h>
+# include <stdarg.h>
 # include "libft/libft.h"
-# ifndef FD
-#  define FD 1
-# endif
 
-typedef struct	s_params
+typedef struct	s_printf
 {
-	char		*format;
-	char		*final_str;
-	char		*str;
-	char		*spaces;
-	char		*zeros;
-	char		type;
-	va_list		ap;
-	int			num_spaces;
-	int			len;
-	int			zero;
-	int			minus;
-	int			width;
-	int			precision;
-	int			lenstr;
-	int			isneg;
-	int			noprecision;
-	int			point;
-	int			noprint;
-	int			num_zeros;
-	int			num_0;
-}				t_params;
+	int		len;
+	int		width; 
+	int		precision;
+	char	flags;
+	int		flags2;
+	char	conversor;
+	char	*format;
+	char	*finalstring;
+	int		negative;
+	va_list	ap;
 
-int				ft_printf(const char *format, ...);
-void			ft_clean(t_params *p);
-void			ft_check_precission(t_params *p);
-void			ft_check_width(t_params *p);
-void			ft_check_flags(t_params *p);
-int				ft_typers(char c);
-void			ft_check(t_params *p);
-void			ft_char2str(t_params *p);
-void			ft_str2str(t_params *p);
-void			ft_unsignum2str(t_params *p);
-char			*ft_itoaunsigned(unsigned int n);
-void			ft_num2str(t_params *p);
-void			ft_int2hex(t_params *p);
-void			ft_arg2hex(t_params *p);
-void			ft_putnbrfd(unsigned long int nb, t_params *p, char c);
-void			ft_check_width_precision1(t_params *p);
-void			ft_check_width_precision2(t_params *p);
-void			ft_space_creator(t_params *p);
-void			ft_zeros_creator(t_params *p);
-void			ft_putstrfd(char *s, t_params *p);
-void			ft_putchar_tostr(char c, t_params *p);
-void			ft_putchar(char c, t_params *p);
-void			ft_putcharfd(char c, t_params *p);
-int				ft_strlen_int(const char *str);
-char			*ft_strchrmod(const char *s, int c);
-void			ft_finalstr2print1(t_params *p);
-void			ft_finalstr2print2(t_params *p);
+}				t_printf;
+
+void	ft_options(t_printf *x);
+void	ft_convert_to_char(t_printf *x);
+void	ft_precision(t_printf *x);
+void	ft_printf_str(t_printf *x);
+void	ft_print_char(t_printf *x);
+void	ft_print_int(t_printf *x);
+void	ft_print_unsignedint(t_printf *x);
+void	ft_print_x(t_printf *x);
+void	ft_print_altx(t_printf *x);
+void	ft_print_p(t_printf *x);
+void	ft_print_finalstring(char *str, t_printf *x);
+void	ft_flags(t_printf *x);
+void	ft_width(t_printf *x);
+void	ft_putchar_str(char *str,int lenstr, t_printf *x);
+void	ft_putchar_width(char *str, char c, int lenstr, t_printf *x);
+void	ft_print_precision(int lenstr, t_printf *x);
+char	*ft_cutstr(char *str, t_printf *x);
+int		ft_printf(const char *format, ...);
+
 #endif

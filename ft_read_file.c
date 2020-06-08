@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_read_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <jcervill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gmartin- <gmartin-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/10 03:59:29 by dgomez            #+#    #+#             */
-/*   Updated: 2020/03/30 12:34:31 by jcervill         ###   ########.fr       */
+/*   Created: 2020/06/08 12:07:23 by gmartin-          #+#    #+#             */
+/*   Updated: 2020/06/08 21:46:33 by gmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,14 @@
 
 int ft_check_extension(char *str)// TODO:REVISAR EXTENSION
 {
-	char *extensions[3];
+	char *extensions;
 	int i;
 	int rtn;
 
 	rtn = -1;
-	extensions[0] = ".jpg";
-	extensions[1] = ".png";
-	extensions[2] = ".bmp";
-	i = 0;
-	while (i < 3)
-	{
-		if (ft_strcmp(extensions[i], str) != 0)
-			rtn = 1;
-		i++;
-	}
+	extensions = ".xpm";
+	if (ft_strcmp(extensions, str) != 0)
+		rtn = 1;
 	return (rtn);
 }
 
@@ -36,7 +29,6 @@ int ft_handle_resolution(t_file *f) // TODO:SPLIT
 {
 	if (*f->line == 'R' && *f->line)
 	{
-		ft_printf("entro_resolucion\n");
 		char **test;
 		int i;
 		i = 0;
@@ -104,7 +96,6 @@ int ft_handle_path_spritex(t_file *f, int i)
 
 int ft_handle_textures(t_file *f)
 {
-	ft_printf("entro_texturas\n");
 	while (*f->line)
 	{
 		if (*f->line == 'N' && *(f->line + 1) == 'O')
@@ -127,7 +118,6 @@ int ft_handle_textures(t_file *f)
 
 int ft_handle_spritex(t_file *f)
 {
-	ft_printf("entro_sprites\n");
 	int i;
 
 	i = 0;
@@ -143,91 +133,85 @@ int ft_handle_spritex(t_file *f)
 	}
 	return (f->rtn);
 }
-// TODO: SUSTITUIR POR FT_SPLIT
+
+int localisdigit(t_file *f, char **test) //para comprobar que sean numeros lo que nos dan 
+{
+	int i = 0;
+	int j = 0;
+	char **aux = test;
+	while (i <= 2)
+	{
+		j = 0;
+		while (aux[i][j])
+		{
+			if (!ft_isdigit(aux[i][j]))
+				return ((f->rtn = -1));
+			j++;
+		}
+		i++;
+	}
+	i = 0;
+	j = 0;
+	return(1);
+}
+
+char	localstrchr(const char *s, int c)
+{
+	int i;
+	i = 0; 
+	while (*s)
+	{
+		if (*s == (char)c)
+		{
+			i++;
+		}
+		s++;
+	}
+	return (i);
+}
+
 int ft_handle_cfloor(t_file *f)
 {
-	while (*f->line)
-	{
-		if (*f->line == 'F' && *(f->line + 1) == ' ')
-		{
-			ft_printf("entro_color_floor\n");
-			//char **test = ft_split(f->line, ' ');
-			//printf("%s", test[1]);
-			while (!(ft_isdigit(*f->line)))
-				f->line++;
-			if ((f->cf[0] = ft_atoi(f->line)) >= 0)
-				if (f->cf[0] > 255)
-					return ((f->rtn = -1));
-			if (!(f->line = ft_strchr(f->line, ',')))
+	char **test;
+	char **test2;
+	if (*f->line == 'F' && *f->line)
+	{	
+		test = ft_split(f->line, ' ');
+		test2 = ft_split(test[1], ',');
+		if (localisdigit(f, test2) == -1 || localstrchr(test[1], ',') > 2 || test2[3] != 0 || test[2] != 0)
+			return ((f->rtn = -1));
+		if ((f->cf[0] = ft_atoi( test2[0])) >= 0)
+			if (f->cf[0] > 255 || f->cf[0] < 0)
 				return ((f->rtn = -1));
-			else
-			{
-				if ((f->cf[1] = ft_atoi(++f->line)) >= 0)
-					if (f->cf[1] > 255)
-						return ((f->rtn = -1));
-			}
-			if (!(f->line = ft_strchr(f->line, ',')))
+		if ((f->cf[1] = ft_atoi( test2[1])) >= 0)
+			if (f->cf[1] > 255 || f->cf[1] < 0)
 				return ((f->rtn = -1));
-			else
-			{
-				if ((f->cf[2] = ft_atoi(++f->line)) > 0)
-					if (f->cf[2] > 255)
-						return ((f->rtn = -1));
-			}
-			while (ft_isdigit(*f->line) && *f->line)
-				f->line++;
-			while (*f->line)
-			{
-				if (*f->line != ' ')
-					return ((f->rtn = -1));
-				f->line++;
-			}
-		}
-		if (*f->line)
-			f->line++;
+		if ((f->cf[2] = ft_atoi( test2[2])) >= 0)
+			if (f->cf[2] > 255 || f->cf[2] < 0)
+				return ((f->rtn = -1));
 	}
 	return (f->rtn);
 }
 
 int ft_handle_croof(t_file *f)
 {
-	while (*f->line)
-	{
-		if (*f->line == 'C' && *(f->line + 1) == ' ')
-		{
-			ft_printf("entro_color_roof\n");
-			while (!(ft_isdigit(*f->line)))
-				f->line++;
-			if ((f->cc[0] = ft_atoi(f->line)) >= 0)
-				if (f->cc[0] > 255)
-					return ((f->rtn = -1));
-			if (!(f->line = ft_strchr(f->line, ',')))
+	char **test;
+	char **test2;
+	if (*f->line == 'C' && *f->line)
+	{	
+		test = ft_split(f->line, ' ');
+		test2 = ft_split(test[1], ',');
+		if (localisdigit(f, test2) == -1 || localstrchr(test[1], ',') > 2 || test2[3] != 0 || test[2] != 0)
+			return ((f->rtn = -1));
+		if ((f->cc[0] = ft_atoi( test2[0])) >= 0)
+			if (f->cc[0] > 255 || f->cc[0] < 0)
 				return ((f->rtn = -1));
-			else
-			{
-				if ((f->cc[1] = ft_atoi(++f->line)) >= 0)
-					if (f->cc[1] > 255)
-						return ((f->rtn = -1));
-			}
-			if (!(f->line = ft_strchr(f->line, ',')))
+		if ((f->cc[1] = ft_atoi( test2[1])) >= 0)
+			if (f->cc[1] > 255 || f->cc[1] < 0)
 				return ((f->rtn = -1));
-			else
-			{
-				if ((f->cc[2] = ft_atoi(++f->line)) > 0)
-					if (f->cc[2] > 255)
-						return ((f->rtn = -1));
-			}
-			while (ft_isdigit(*f->line) && *f->line)
-				f->line++;
-			while (*f->line)
-			{
-				if (*f->line != ' ')
-					return ((f->rtn = -1));
-				f->line++;
-			}
-		}
-		if (*f->line)
-			f->line++;
+		if ((f->cc[2] = ft_atoi( test2[2])) >= 0)
+			if (f->cc[2] > 255 || f->cc[2] < 0)
+				return ((f->rtn = -1));
 	}
 	return (f->rtn);
 }
@@ -238,7 +222,6 @@ int ft_handle_rgb(t_file *f, int i)
 	char *aux;
 	char **color;
 	int	 *rgb;
-	ft_printf("entro_rgb_2_hex\n");
 	if (i == 1)
 	{
 		color = &f->c_f;
@@ -266,8 +249,6 @@ int ft_handle_rgb(t_file *f, int i)
 			;
 	return (f->rtn);
 }
-
-
 
 int ft_handle_map_read(t_file *f)
 {
@@ -340,23 +321,18 @@ int alloc_map(t_file *f)
                 {
 					if (f->dir == '\0')
                     {
-						f->map[i][j] = 4;    // el numero 4 indicara la posicion de salida
+						f->map[i][j] = 0;
+						f->init[0] = i;
+						f->init[1] = j;
 						f->dir = f->buff[k];
 					}
+					else
+						return(f->rtn = -1);
                     k++;
                    // l--;
                 }
                 j++;
             }
-            /*if (f->buff[k] == '\n' && l > 0)
-            {
-                while (l > 0)
-                {
-                    f->map[i][j] = 0;
-                    j++;
-                    l--;
-                }
-            }*/
             k++;
             i++;
         }

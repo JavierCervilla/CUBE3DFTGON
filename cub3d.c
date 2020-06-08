@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <jcervill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gmartin- <gmartin-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/10 02:56:54 by dgomez            #+#    #+#             */
-/*   Updated: 2020/03/30 12:42:33 by jcervill         ###   ########.fr       */
+/*   Created: 2020/06/08 12:06:49 by gmartin-          #+#    #+#             */
+/*   Updated: 2020/06/08 21:56:27 by gmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ void	ft_init_file_struct(t_file *f)
 	f->nFil = 0;
 	f->nColMax = 0;
 	f->dir = '\0';
+	f->init[0] = 0;
+	f->init[1] = 0;
 }
 
 void	ft_handle_error(char *str) //TODO:MODIFICAR STRERR
@@ -92,7 +94,6 @@ void	ft_handle_error(char *str) //TODO:MODIFICAR STRERR
 
 void		ft_handle_colors(t_file *f)
 {
-	ft_printf("aqui llego");
 	if ((ft_handle_rgb(f, 1)) == -1)
 		ft_handle_error("Text. ERROR while parsing rgb to hex\n");
 	if ((ft_handle_rgb(f, 2)) == -1)
@@ -109,7 +110,9 @@ void debugging(t_file *f)
 	ft_printf("C_Floor:\n	hexa:	%s\n	c_f[0][R]: %d\n	c_f[1][G]: %d\n	c_f[2][B]: %d\n", f->c_f, f->cf[0], f->cf[1], f->cf[2]);
 	ft_printf("C_Roof:\n	hexa:	%s\n	c_c[0][R]: %d\n	c_c[1][G]: %d\n	c_c[2][B]: %d\n", f->c_c, f->cc[0], f->cc[1], f->cc[2]);
 	ft_printf("buff:\n%s\n", f->buff);
-    while (j < f->nFil)
+	ft_printf("posición inicial : (%d : %d) dirección incial: %c\n", f->init[0], f->init[1], f->dir);
+	ft_printf("\nRTN: %d\n", f->rtn);
+	while (j < f->nFil && f->rtn != -1)
     {
         k = 0;
         while (k < f->nColMax)
@@ -137,6 +140,10 @@ int	ft_read(t_file *f)
 	}
 	ft_handle_colors(f);
 	alloc_map(f);
+	if (f->rtn == -1)
+		ft_handle_error("MAP.ERROR while allock. asshole\n");
+	if((f->rtn = map_check(f->init[0], f->init[1], f)) == -1)
+		ft_handle_error("MAP.ERROR while check. stupid\n");
 	return (f->rtn);
 }
 
@@ -146,5 +153,6 @@ int	main(/*int argc, char *argv[]*/)
 	ft_read(&f);
 	//ft_printf("width: %d\nheight: %d\n", f.w, f.h);
 	debugging(&f);
+	
 	return (0);
 }

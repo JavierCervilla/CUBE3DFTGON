@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gmartin- <gmartin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/25 16:37:09 by jcervill          #+#    #+#             */
-/*   Updated: 2019/11/25 17:07:41 by jcervill         ###   ########.fr       */
+/*   Created: 2019/11/19 20:00:24 by gmartin-          #+#    #+#             */
+/*   Updated: 2019/11/20 13:04:32 by gmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,23 @@
 
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_list *aux;
-	t_list *start;
-	t_list *new;
+	t_list	*aux;
+	t_list	*list;
 
-	if (lst)
+	if (!lst)
+		return (NULL);
+	list = ft_lstnew(f(lst->content));
+	aux = list;
+	while (lst->next)
 	{
-		aux = lst;
-		if (!(start = ft_lstnew(f(lst->content))))
-			return (NULL);
-		aux = aux->next;
-		while (aux)
+		lst = lst->next;
+		if (!(list->next = ft_lstnew(f(lst->content))))
 		{
-			if (!(new = ft_lstnew(f(aux->content))))
-			{
-				ft_lstclear(&start, del);
-				return (NULL);
-			}
-			ft_lstadd_back(&start, new);
-			aux = aux->next;
+			del(list->next);
+			free(list->next);
+			return (NULL);
 		}
-		return (start);
+		list = list->next;
 	}
-	return (NULL);
+	return (aux);
 }

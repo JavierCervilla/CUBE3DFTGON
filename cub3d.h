@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <jcervill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gmartin- <gmartin-@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/04 01:34:16 by jcervill          #+#    #+#             */
-/*   Updated: 2020/03/30 12:41:29 by jcervill         ###   ########.fr       */
+/*   Created: 2020/06/08 12:07:03 by gmartin-          #+#    #+#             */
+/*   Updated: 2020/06/08 21:38:43 by gmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ typedef struct		s_readfile
 	int		cc[3];
 	int		**map;				//  Matriz de mapa
 	char	dir;				//  orientacion del jugador
+	int		init[2];			//  posición inicial del jugador
 	int		mapreaded;			//  -1 si no se ha leido 0 si se termino de leer
 	int		nColMax;			//  Numero de columnas MAX
 	int		nFil;				//  Numero de filas
 	char	*buff;				//  Buff auxiliar para guardar el mapa;
 	int		rtn;				//  retorno para funciones, -1 = ERROR
-	
 }					t_file;
 
 /*
@@ -57,5 +57,6 @@ int					ft_handle_spritex(t_file *f);
 void				ft_handle_colors(t_file *f);
 int					ft_handle_rgb(t_file *f, int i);
 int					alloc_map(t_file *f);
+int					map_check(int row, int col, t_file *f);
 
 #endif

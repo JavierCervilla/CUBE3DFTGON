@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gmartin- <gmartin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/22 09:46:50 by jcervill          #+#    #+#             */
-/*   Updated: 2020/01/22 09:46:52 by jcervill         ###   ########.fr       */
+/*   Created: 2019/11/13 12:55:21 by gmartin-          #+#    #+#             */
+/*   Updated: 2020/01/02 12:38:29 by gmartin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,28 @@
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*str;
-	int		i;
-	int		j;
+	char	*dst;
+	int		x;
+	int		y;
 
-	i = 0;
-	j = 0;
+	x = 0;
+	y = 0;
 	if (!s1 || !s2)
-		return (0);
-	if (!(str = malloc((sizeof(*str) * (ft_strlen(s1) + ft_strlen(s2)) + 1))))
-		return (0);
-	while (s1[i])
+		return (NULL);
+	dst = malloc(sizeof(*dst) * ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (dst == NULL)
+		return (NULL);
+	while (s1[x])
 	{
-		str[i] = s1[i];
-		i++;
+		dst[x] = s1[x];
+		x++;
 	}
-	while (s2[j])
+	while (s2[y])
 	{
-		str[i] = s2[j];
-		j++;
-		i++;
+		dst[x] = s2[y];
+		x++;
+		y++;
 	}
-	str[i] = 0;
-	return (str);
+	dst[x] = '\0';
+	return (dst);
 }

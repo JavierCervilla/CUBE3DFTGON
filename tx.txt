@@ -1,11 +1,11 @@
 R        1920    1080       
-NO ./src/Meme1.png
-SO ./src/Meme2.png
-WE ./src/Meme3.png
-EA ./src/Meme4.png
-S ./src/Meme5.png
+NO ./src/Meme1.xpm
+SO ./src/Meme2.xpm
+WE ./src/Meme3.xpm
+EA ./src/Meme4.xpm
+S ./src/Meme5.xpm
 F 220,100,0
-C 225,30,0
+C 220,30,0
 111111111111111111
 1001100000000000011111111
 1011000001110000002000001
