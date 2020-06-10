@@ -82,6 +82,8 @@ void	ft_init_file_struct(t_file *f)
 	f->nFil = 0;
 	f->nColMax = 0;
 	f->dir = '\0';
+	f->pos[0] = 0;
+	f->pos[1] = 0;
 }
 
 void	ft_handle_error(char *str) //TODO:MODIFICAR STRERR
@@ -136,7 +138,9 @@ int	ft_read(t_file *f)
 			break;
 	}
 	ft_handle_colors(f);
-	alloc_map(f);
+	if (alloc_map(f) != -1)
+		if (ft_map_check(f->pos[0], f->pos[1], f) == -1)
+			ft_handle_error("MAP ERROR.Error al checkear el mapa");
 	return (f->rtn);
 }
 

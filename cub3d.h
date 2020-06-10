@@ -36,6 +36,7 @@ typedef struct		s_readfile
 	int		cc[3];
 	int		**map;				//  Matriz de mapa
 	char	dir;				//  orientacion del jugador
+	int		pos[2];				//	posicion inical del jugador
 	int		mapreaded;			//  -1 si no se ha leido 0 si se termino de leer
 	int		nColMax;			//  Numero de columnas MAX
 	int		nFil;				//  Numero de filas
@@ -57,5 +58,6 @@ int					ft_handle_spritex(t_file *f);
 void				ft_handle_colors(t_file *f);
 int					ft_handle_rgb(t_file *f, int i);
 int					alloc_map(t_file *f);
+int					ft_map_check(int row, int col, t_file *f);
 
 #endif

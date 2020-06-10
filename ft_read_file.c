@@ -12,57 +12,56 @@
 
 #include "cub3d.h"
 
-int ft_check_extension(char *str)// TODO:REVISAR EXTENSION
+int	ft_check_extension(char *str)
 {
-	char *extensions[3];
-	int i;
-	int rtn;
+	char	*extensions;
+	int		rtn;
 
 	rtn = -1;
-	extensions[0] = ".jpg";
-	extensions[1] = ".png";
-	extensions[2] = ".bmp";
-	i = 0;
-	while (i < 3)
-	{
-		if (ft_strcmp(extensions[i], str) != 0)
-			rtn = 1;
-		i++;
-	}
+	extensions = ".xpm";
+	if (ft_strcmp(extensions, str) != 0)
+		rtn = 1;
 	return (rtn);
 }
 
-int ft_handle_resolution(t_file *f) // TODO:SPLIT
+static void	ft_set_res(char **res, int j, t_file *f)
 {
+	if (j == 1)
+		f->w = ft_atoi(res[j]);
+	if (j == 2)
+		f->h = ft_atoi(res[j]);
+}
+
+int	ft_handle_resolution(t_file *f)
+{
+	char	**res;
+	int		i;
+	int		j;
+
 	if (*f->line == 'R' && *f->line)
 	{
-		ft_printf("entro_resolucion\n");
-		char **test;
-		int i;
 		i = 0;
-		int ctest = 1;
-		test = ft_split(f->line, ' ');
-		if (test[3] != 0)
-			return(f->rtn = -1);
-		while (ctest <= 2){
-			while (test[ctest][i])
+		j = 1;
+		res = ft_split(f->line, ' ');
+		if (res[3] != 0)
+			return (f->rtn = -1);
+		while (j <= 2)
+		{
+			while (res[j][i])
 			{
-				if (!ft_isdigit(test[ctest][i]))
-					return(f->rtn = -1);
+				if (!ft_isdigit(res[j][i]))
+					return (f->rtn = -1);
 				i++;
 			}
 			i = 0;
-			if (ctest == 1)
-				f->w = ft_atoi(test[ctest]);
-			if (ctest == 2)
-				f->h = ft_atoi(test[ctest]);
-			ctest++;	
+			ft_set_res(res, j, f);
+			j++;
 		}
 	}
 	return (f->rtn);
 }
 
-int ft_handle_path_texture(t_file *f, int i) // TODO:REVISAR FORMATO DE TEXTURA
+int ft_handle_path_texture(t_file *f, int i)
 {
 	char *aux;
 	char *ext;
@@ -151,8 +150,8 @@ int ft_handle_cfloor(t_file *f)
 		if (*f->line == 'F' && *(f->line + 1) == ' ')
 		{
 			ft_printf("entro_color_floor\n");
-			//char **test = ft_split(f->line, ' ');
-			//printf("%s", test[1]);
+			//char **res = ft_split(f->line, ' ');
+			//printf("%s", res[1]);
 			while (!(ft_isdigit(*f->line)))
 				f->line++;
 			if ((f->cf[0] = ft_atoi(f->line)) >= 0)
@@ -340,8 +339,10 @@ int alloc_map(t_file *f)
                 {
 					if (f->dir == '\0')
                     {
-						f->map[i][j] = 4;    // el numero 4 indicara la posicion de salida
+						f->map[i][j] = 0;    // el numero 4 indicara la posicion de salida
 						f->dir = f->buff[k];
+						f->pos[0] = i;
+						f->pos[1] = j;
 					}
                     k++;
                    // l--;
