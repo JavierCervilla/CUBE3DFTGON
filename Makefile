@@ -46,10 +46,10 @@ $(NAME): #$(OBJECTS)
 
 
 debug:
-	$(CC) -g cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -L$(MLX_DIR) -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
+	$(CC) -g cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
 
 compile:
-	$(CC)  cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -lmlx -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
+	$(CC)  cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
 
 crun: compile
 	clear

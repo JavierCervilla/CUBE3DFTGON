@@ -86,6 +86,13 @@ void	ft_init_file_struct(t_file *f)
 	f->pos[1] = 0;
 	f->current_pos[0] = 1;
 	f->current_pos[1] = 1;
+	// Estructura auxiliar mlx
+	f->ml.Pos.x = 0.0;
+	f->ml.Pos.y = 0.0;
+	f->ml.currentDir.x = 0.0; 
+    f->ml.currentDir.y = 0.0;
+	f->ml.plane.x = 0.0; 
+    f->ml.plane.y = 0.66;
 }
 
 void	ft_handle_error(char *str) //TODO:MODIFICAR STRERR
@@ -151,17 +158,18 @@ int	ft_read(t_file *f)
 int	main(/*int argc, char *argv[]*/)
 {
 	t_file		f;  //	Declarar la estructura
-	t_mlx		ml; //  Declarar la estructura auxiliar de mlx
-	t_mov		mv; //	DEclarar la estructura auxiliar del movimiento
-
+	
 	if (ft_read(&f) == -1)
 		ft_handle_error("ERROR.Lectura del archivo");
-	//debugging(&f);
+	debugging(&f);
 	if (!(f.ml.mlx = mlx_init()))
 		ft_handle_error("ERROR.MLX_INIT");
 	if(!(f.ml.window = mlx_new_window(f.ml.mlx, f.w, f.h, "CUB3D")))
 		ft_handle_error("ERROR.MLX_WINDOW");
-	mlx_hook(f.ml.window, 2, 1, ft_handle_movement, &f);
+	ft_initraycast(&f);
+	//mlx_hook(f.ml.window, 2, 1, ft_handle_movement, &f);
+	//mlx_loop_hook(f.ml.mlx, ft_initraycast, &f);
 	mlx_loop(f.ml.mlx);
+
 	return (0);
 }

@@ -91,11 +91,5 @@ int ft_handle_movement(int key, t_file *f)
 	else if(key == KEY_A || key == KEY_LEFT)
 		ft_check_and_move(4, f);
 	printf("pos[%d][%d]\n", f->current_pos[0], f->current_pos[1]);
-
 }
 
-int ft_handle_hooks(t_file *f)
-{
-	mlx_hook(f->ml.window, 2, 1, ft_handle_movement, &f);
-	return(0);
-}

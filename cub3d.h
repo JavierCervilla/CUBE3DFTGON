@@ -12,6 +12,7 @@
 
 #ifndef CUB3D_H
 # define CUB3D_H
+# include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/types.h>
@@ -63,8 +64,18 @@ typedef struct		s_vector
 
 typedef struct		s_mlx
 {
-	void *mlx;					// instancia de mlx
-	void *window;				// instancia de ventana
+	void		*mlx;					// instancia de mlx
+	void		*window;				// instancia de ventana
+	t_vector	plane;					// camera plane
+	t_vector	Pos;					// posicion actual
+	t_vector	currentDir;				// direccion inicial
+	t_vector	ray;					// rayo 
+	t_vector	deltaDist;				// distancia entre xs o ys 
+	t_vector	raylength;				// distancia del rayo
+	double		cameraX;				// coordenada x en camera
+	int			mapX;					// cuadrado en el que estas componete x
+	int			mapY;				// cuadrado en el que estas componete x
+	int			step[2];				// ray components -1 if neg +1 if pos
 }					t_mlx;
 
 /*--------------ESTRUCTURA AUX MOVIMIENTO---------*/
@@ -126,6 +137,11 @@ void				ft_handle_colors(t_file *f);
 int					ft_handle_rgb(t_file *f, int i);
 int					alloc_map(t_file *f);
 int					ft_map_check(int row, int col, t_file *f);
+
+/*
+** RAY CASTER ENGINE
+*/
+int					ft_initraycast(t_file *f);
 
 
 /*
