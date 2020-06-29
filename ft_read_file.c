@@ -295,69 +295,57 @@ int ft_handle_map_read(t_file *f)
     }
 	return (f->rtn);
 }
+
+static void ft_filling_matrix(t_file *f, int k, int i, int j)
+{
+	if (f->buff[k] == '0' || f->buff[k] == '1' || f->buff[k] == '2')
+	{
+		f->map[i][j] = (int)f->buff[k] - '0';
+	}
+	else if (f->buff[k] == ' ')
+	{
+		f->map[i][j] = 4;
+	}
+	else if (f->buff[k] == 'N' || f->buff[k] == 'S' || f->buff[k] == 'E'
+		|| f->buff[k] == 'W')
+	{
+		if (f->dir == '\0')
+		{
+			f->map[i][j] = 0;
+			f->dir = f->buff[k];
+			f->pos[0] = i;
+			f->current_pos[0] = i;
+			f->pos[1] = j;
+			f->current_pos[1] = j;
+		}
+	}
+}
+
 // TODO: REESCRIBIR CON CALLOC PARA REDUCIR LINEAS
 int alloc_map(t_file *f)
 {
     int i; // recorrer filas
     int j; // recorrer columnas
     int k; // recorrer buffer
-    int l; // numero de columnas maximo
 
     i = 0;
     i = 0;
     k = 0;
-    //if (!(f->map = (int **)malloc(sizeof(int *) * (f->nFil))))
-    //    return (0);
 	if (!(f->map = ft_calloc(f->nFil, sizeof(int *))))
 		return(0);
     else
     {
         while (i < f->nFil && f->buff[k])
         {
-            //if (!(f->map[i] = (int *)malloc(sizeof(int) * f->nColMax)))
-            //    return (0);
 			if(!(f->map[i] = ft_calloc(f->nColMax, sizeof(int *))))
 				return(0);
             j = 0;
-            l = f->nColMax;
             while (j < f->nColMax && f->buff[k] != '\n')
             {
-                if (f->buff[k] == '0' || f->buff[k] == '1' || f->buff[k] == '2')
-                {
-                    f->map[i][j] = (int)f->buff[k] - '0';
-                    k++;
-                    //l--;
-                }
-                else if (f->buff[k] == ' ')
-                {
-                    f->map[i][j] = 0;// TODO:PUEDE DAR ERROR SI HAY ESPACIO DENTRO DE LA MATRIZ
-                    k++;
-                 //   l--;
-                }
-				else if (f->buff[k] == 'N' || f->buff[k] == 'S' || f->buff[k] == 'E'
-					|| f->buff[k] == 'W')
-                {
-					if (f->dir == '\0')
-                    {
-						f->map[i][j] = 0;    // el numero 4 indicara la posicion de salida
-						f->dir = f->buff[k];
-						f->pos[0] = i;
-						f->pos[1] = j;
-					}
-                    k++;
-                   // l--;
-                }
+                ft_filling_matrix(f,k,i,j);
+                k++;
                 j++;
             }
-            /*if (f->buff[k] == '\n' && l > 0)
-            {
-                while (l > 0)
-                {
-                    f->map[i][j] = 0;
-                    j++;
-                    l--;
-                }
-            }*/
             k++;
             i++;
         }

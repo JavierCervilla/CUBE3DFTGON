@@ -84,6 +84,8 @@ void	ft_init_file_struct(t_file *f)
 	f->dir = '\0';
 	f->pos[0] = 0;
 	f->pos[1] = 0;
+	f->current_pos[0] = 1;
+	f->current_pos[1] = 1;
 }
 
 void	ft_handle_error(char *str) //TODO:MODIFICAR STRERR
@@ -100,7 +102,7 @@ void		ft_handle_colors(t_file *f)
 	if ((ft_handle_rgb(f, 2)) == -1)
 		ft_handle_error("Text. ERROR while parsing rgb to hex\n");
 }
-
+/* DEBUGGING*/
 void debugging(t_file *f)
 {
 	int j = 0;
@@ -144,11 +146,22 @@ int	ft_read(t_file *f)
 	return (f->rtn);
 }
 
+
+
 int	main(/*int argc, char *argv[]*/)
 {
 	t_file		f;  //	Declarar la estructura
-	ft_read(&f);
-	//ft_printf("width: %d\nheight: %d\n", f.w, f.h);
-	debugging(&f);
+	t_mlx		ml; //  Declarar la estructura auxiliar de mlx
+	t_mov		mv; //	DEclarar la estructura auxiliar del movimiento
+
+	if (ft_read(&f) == -1)
+		ft_handle_error("ERROR.Lectura del archivo");
+	//debugging(&f);
+	if (!(f.ml.mlx = mlx_init()))
+		ft_handle_error("ERROR.MLX_INIT");
+	if(!(f.ml.window = mlx_new_window(f.ml.mlx, f.w, f.h, "CUB3D")))
+		ft_handle_error("ERROR.MLX_WINDOW");
+	mlx_hook(f.ml.window, 2, 1, ft_handle_movement, &f);
+	mlx_loop(f.ml.mlx);
 	return (0);
 }

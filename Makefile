@@ -17,7 +17,7 @@ INC_DIR		=	./includes/
 PRINTF_DIR 	=	$(INC_DIR)printf/
 
 #MLX_DIR		=	$(INC_DIR)mlx/
-MLX_DIR		=	/home/javi/minilibx
+MLX_DIR		=	/home/javi/minilibx/
 CC			=	gcc
 FLAGS		=	-c -Wall -Wextra -Werror
 
@@ -40,15 +40,16 @@ $(NAME): #$(OBJECTS)
 	@make -C $(PRINTF_DIR)
 	@make -C $(MLX_DIR)
 	@echo "Compiling objects..."
-	$(CC)  cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -lmlx -L $(MLX_DIR) -o  $(NAME)
+	$(CC)  cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR)   -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
+	#$(CC)  cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -L $(MLX_DIR)libmlx_Linux.a -lmlx   -o  $(NAME)
 	@echo "Done."
 
 
 debug:
-	$(CC) -g cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -lmlx -L $(MLX_DIR) -o  $(NAME)
+	$(CC) -g cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -L$(MLX_DIR) -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
 
 compile:
-	$(CC)  cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -lmlx -L $(MLX_DIR) -o  $(NAME)
+	$(CC)  cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -lmlx -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
 
 crun: compile
 	clear

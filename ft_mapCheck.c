@@ -15,7 +15,8 @@
 int ft_map_check(int row, int col, t_file *f)
 {
     int ok;
-    if (row < 0 || col < 0 || row >= f->nFil || col >= f->nColMax)
+    if (row < 0 || col < 0 || row >= f->nFil || col >= f->nColMax ||
+      f->map[row][col] == 4)
 		  return (-1);
     else if (f->map[row][col] == 3 || f->map[row][col] == 1)
 		  return (0);
