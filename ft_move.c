@@ -50,12 +50,9 @@ int ft_check_and_move(int dir, t_file *f)
 	}
 	else if (dir == 2)
 	{
-		if(f->map[f->current_pos[0]][f->current_pos[1] + 1] == 3)
-		{
-			f->current_pos[1] = f->current_pos[1] + 1;
-			ft_printf("RIGHT!!!!\n");
-			return(0);
-		}
+		f->current_pos[1] = f->current_pos[1] + 1;
+		ft_printf("RIGHT!!!!\n");
+		return(0);
 	}
 	else if (dir == 3)
 	{
@@ -90,6 +87,8 @@ int ft_handle_movement(int key, t_file *f)
 		ft_check_and_move(3, f);
 	else if(key == KEY_A || key == KEY_LEFT)
 		ft_check_and_move(4, f);
-	printf("pos[%d][%d]\n", f->current_pos[0], f->current_pos[1]);
+	//printf("pos[%d][%d]\n", f->current_pos[0], f->current_pos[1]);
+	mlx_clear_window(f->ml.mlx, f->ml.window);
+	ft_initraycast(f);
 }
 

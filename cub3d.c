@@ -87,8 +87,8 @@ void	ft_init_file_struct(t_file *f)
 	f->current_pos[0] = 1;
 	f->current_pos[1] = 1;
 	// Estructura auxiliar mlx
-	f->ml.Pos.x = 0.0;
-	f->ml.Pos.y = 0.0;
+	f->ml.pos.x = 0.0;
+	f->ml.pos.y = 0.0;
 	f->ml.currentDir.x = 0.0; 
     f->ml.currentDir.y = 0.0;
 	f->ml.plane.x = 0.0; 
@@ -167,7 +167,7 @@ int	main(/*int argc, char *argv[]*/)
 	if(!(f.ml.window = mlx_new_window(f.ml.mlx, f.w, f.h, "CUB3D")))
 		ft_handle_error("ERROR.MLX_WINDOW");
 	ft_initraycast(&f);
-	//mlx_hook(f.ml.window, 2, 1, ft_handle_movement, &f);
+	mlx_hook(f.ml.window, 2, 1, ft_handle_movement, &f);
 	//mlx_loop_hook(f.ml.mlx, ft_initraycast, &f);
 	mlx_loop(f.ml.mlx);
 

@@ -67,15 +67,21 @@ typedef struct		s_mlx
 	void		*mlx;					// instancia de mlx
 	void		*window;				// instancia de ventana
 	t_vector	plane;					// camera plane
-	t_vector	Pos;					// posicion actual
+	t_vector	pos;					// posicion actual
 	t_vector	currentDir;				// direccion inicial
 	t_vector	ray;					// rayo 
 	t_vector	deltaDist;				// distancia entre xs o ys 
 	t_vector	raylength;				// distancia del rayo
+	t_vector	step;					// ray components -1 if neg +1 if pos
 	double		cameraX;				// coordenada x en camera
 	int			mapX;					// cuadrado en el que estas componete x
-	int			mapY;				// cuadrado en el que estas componete x
-	int			step[2];				// ray components -1 if neg +1 if pos
+	int			mapY;					// cuadrado en el que estas componete x
+	int			lineHeight;				// altura de la linea a dibujar
+	double		perpWallDist;			// distancia ortogonal
+	int			drawStart;				// primer pixel donde tiene que pintar
+	int			drawEnd;				// ultimo pixel a pintar
+	int			color;					// color de los muros
+	int			x;						// contador para el bucle
 }					t_mlx;
 
 /*--------------ESTRUCTURA AUX MOVIMIENTO---------*/
@@ -152,6 +158,6 @@ void				ft_print_map(t_file *f);
 int					ft_check_and_move(int dir, t_file *f);
 int					ft_handle_movement(int key, t_file *f);
 int					ft_handle_hooks(t_file *f);
-
+void				ft_draw_line(t_file *f);
 
 #endif

@@ -40,23 +40,23 @@ void    ft_calc_step(t_file *f)
 {
     if (f->ml.ray.x < 0)
     {
-        f->ml.step[0] = -1;
-        f->ml.raylength.x = (f->ml.Pos.x - f->ml.mapX) * f->ml.deltaDist.x;
+        f->ml.step.x = -1;
+        f->ml.raylength.x = (f->ml.pos.x - f->ml.mapX) * f->ml.deltaDist.x;
     }
     else
     {
-        f->ml.step[0] = 1;
-        f->ml.raylength.x = (f->ml.mapX + 1.0 - f->ml.Pos.x) * f->ml.deltaDist.x;
+        f->ml.step.x = 1;
+        f->ml.raylength.x = (f->ml.mapX + 1.0 - f->ml.pos.x) * f->ml.deltaDist.x;
     }
     if (f->ml.ray.y < 0)
     {
-        f->ml.step[1] = -1;
-        f->ml.raylength.y = (f->ml.Pos.y - f->ml.mapY) * f->ml.deltaDist.y;
+        f->ml.step.y = -1;
+        f->ml.raylength.y = (f->ml.pos.y - f->ml.mapY) * f->ml.deltaDist.y;
     }
     else
     {
-        f->ml.step[1] = 1;
-        f->ml.raylength.y = (f->ml.mapY + 1.0 - f->ml.Pos.y) * f->ml.deltaDist.y;
+        f->ml.step.y = 1;
+        f->ml.raylength.y = (f->ml.mapY + 1.0 - f->ml.pos.y) * f->ml.deltaDist.y;
     }
 }
 
@@ -65,37 +65,56 @@ void    ft_calc_side(t_file *f, int *side)
     if (f->ml.raylength.x < f->ml.raylength.y)
     {
         f->ml.raylength.x += f->ml.deltaDist.x;
-        f->ml.mapX += f->ml.step[0];
+        f->ml.mapX += f->ml.step.x;
         *side = 0;
     }
     else
     {
         f->ml.raylength.y += f->ml.deltaDist.y;
-        f->ml.mapY += f->ml.step[1];
+        f->ml.mapY += f->ml.step.y;
         *side = 1;
     }
 }
 
+int     ft_color(t_file *f)
+{
+    int color;
+
+    if (f->map[f->ml.mapX][f->ml.mapY] == 1)
+    {
+        color = 16712447;
+    }
+    return (color);
+}
+
+void ft_draw_line(t_file *f)
+{
+    int i = f->ml.drawStart - 1;
+    while (++i < f->ml.drawEnd)
+        mlx_pixel_put(f->ml.mlx, f->ml.window, f->ml.x, i, f->ml.color);
+}
+
 int     ft_initraycast(t_file *f)
 {
-    int x;
-    int hit;
-    int side;
+    //int x;          // pixel
+    int hit;        // detecta la colision con el muro
+    int side;       // lado del muro si es x es 0 si es y es 1
+
     ft_cast_init_dir(f);
-    while(1) //Game loop
-    {
-        x = -1;
-        while (++x <= f->w) // raycast
+    //while(1) //Game loop
+    //{
+        f->ml.x = -1;
+        while (++f->ml.x <= f->w) // raycast
         {
             // posicion en la matriz
             f->ml.mapX = f->current_pos[0];
             f->ml.mapY = f->current_pos[1];
             // posicion vectorial
-            f->ml.Pos.x = (double)f->ml.mapX;
-            f->ml.Pos.y = (double)f->ml.mapY;
+            f->ml.pos.x = (double)f->ml.mapX;
+            f->ml.pos.y = (double)f->ml.mapY;
             hit = 0;
             // plano de camera 
-            f->ml.cameraX = (2 * x / (double)f->w) -1;
+            f->ml.cameraX = (2 * f->ml.x / (double)f->w) -1;
             f->ml.ray.x = f->ml.currentDir.x + f->ml.plane.x * f->ml.cameraX;
             f->ml.ray.y = f->ml.currentDir.y + f->ml.plane.y * f->ml.cameraX;
             f->ml.deltaDist.x = (f->ml.ray.y == 0) ? 0: ((f->ml.ray.x == 0) ? 1 : abs(1 / f->ml.ray.x));
@@ -108,11 +127,28 @@ int     ft_initraycast(t_file *f)
                 ft_calc_side(f, &side);
                 if (f->map[f->ml.mapX][f->ml.mapY] == 2 || f->map[f->ml.mapX][f->ml.mapY] == 1)
                 {
-                    printf("CHOQUE: [%d , %d]", f->ml.mapX, f->ml.mapY);
+                    //printf("CHOQUE: [%d , %d]", f->ml.mapX, f->ml.mapY);
                     hit = 1;
                 }
             }
+            // deshaciendo deformaciones de ojo de pez, proyeccion ortogonal del rAYO
+            if (side == 0)
+                f->ml.perpWallDist = (f->ml.mapX - f->ml.pos.x + (1 - f->ml.step.x) / 2) / f->ml.ray.x;
+            else
+                f->ml.perpWallDist = (f->ml.mapY - f->ml.pos.y + (1 - f->ml.step.y) / 2) / f->ml.ray.y;
+            f->ml.lineHeight = (int)(f->h / f->ml.perpWallDist);
+            // calcular el pixel mas bajo y aalto a pintar
+            f->ml.drawStart = (-f->ml.lineHeight / 2) + f->h / 2;
+            if (f->ml.drawStart < 0)
+                f->ml.drawStart = 0;
+            f->ml.drawEnd = (f->ml.lineHeight / 2) +  f->h / 2;
+            if (f->ml.drawEnd < 0)
+                f->ml.drawEnd = 0;
+            // TODO: coloreando los muros y dando intesidades distintas a cada lado del muro(x e y)
+            f->ml.color = ft_color(f);
+            if (side == 1)
+                f->ml.color = f->ml.color - 100;
+            ft_draw_line(f);
         }
-        // TODO: mlx_hook(f->ml.window, 2, 1, ft_handle_movement, &f);
-    }
+    //}
 }
