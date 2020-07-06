@@ -51,6 +51,12 @@
 #  define KEY_DOWN 125
 # endif
 
+
+/*-------------CONSTANTES--------------------------*/
+
+# define ROT 0.008
+# define MOV 0.013
+
 /*-------------ESTRUCTURA VECTOR-------------------*/
 
 typedef struct		s_vector
@@ -64,11 +70,16 @@ typedef struct		s_vector
 
 typedef struct		s_mlx
 {
+	void		*img;					// instancia de la imagen de mlx
+	int			*data_img;				// data de imagen
+	int			bitspp;					// bits por pixel (mlx: get data addr)
+	int			size_line;				// tamaño de line (mlx: get data addr)
+	int			end;					// end (mlx: get data addr)
 	void		*mlx;					// instancia de mlx
 	void		*window;				// instancia de ventana
 	t_vector	plane;					// camera plane
 	t_vector	pos;					// posicion actual
-	t_vector	currentDir;				// direccion inicial
+	t_vector	currentDir;				// direccion del
 	t_vector	ray;					// rayo 
 	t_vector	deltaDist;				// distancia entre xs o ys 
 	t_vector	raylength;				// distancia del rayo
@@ -82,17 +93,18 @@ typedef struct		s_mlx
 	int			drawEnd;				// ultimo pixel a pintar
 	int			color;					// color de los muros
 	int			x;						// contador para el bucle
+	int			side;					// side del muro
 }					t_mlx;
 
 /*--------------ESTRUCTURA AUX MOVIMIENTO---------*/
 typedef struct		s_mov
 {
-	int	up;
-	int	down;
-	int	right;
-	int	left;
-	int	save;
-	
+	int	a;						// movimiento izquierda
+	int	s;
+	int	w;
+	int	d;
+	int r;
+	int l;
 }					t_mov;
 
 /*--------------ESTRUCTURA PRINCIPAL--------------*/
@@ -114,7 +126,6 @@ typedef struct		s_readfile
 	int		**map;				//  Matriz de mapa
 	char	dir;				//  orientacion del jugador
 	int		pos[2];				//	posicion inical del jugador
-	int		current_pos[2];		//	posicion actual del jugador
 	int		mapreaded;			//  -1 si no se ha leido 0 si se termino de leer
 	int		nColMax;			//  Numero de columnas MAX
 	int		nFil;				//  Numero de filas
@@ -155,9 +166,11 @@ int					ft_initraycast(t_file *f);
 */
 
 void				ft_print_map(t_file *f);
-int					ft_check_and_move(int dir, t_file *f);
-int					ft_handle_movement(int key, t_file *f);
-int					ft_handle_hooks(t_file *f);
+int					ft_check_and_move(t_file *f);
 void				ft_draw_line(t_file *f);
+void				ft_cast_init_dir(t_file *f);
+int					ft_move_and_draw(t_file *f);
+int					ft_key_press(int key, t_file *f);
+int					ft_key_release(int key, t_file *f);
 
 #endif

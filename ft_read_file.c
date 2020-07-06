@@ -313,10 +313,11 @@ static void ft_filling_matrix(t_file *f, int k, int i, int j)
 		{
 			f->map[i][j] = 0;
 			f->dir = f->buff[k];
+			ft_cast_init_dir(f);
 			f->pos[0] = i;
-			f->current_pos[0] = i;
+			f->ml.pos.x = i;
 			f->pos[1] = j;
-			f->current_pos[1] = j;
+			f->ml.pos.y = j;
 		}
 	}
 }

@@ -12,83 +12,115 @@
 
 #include "cub3d.h"
 
-void ft_print_map(t_file *f)
+int ft_canmove(int x)
 {
-	int k = 0;
-	int j = 0;
-
-	system("clear");
-	while (j < f->nFil)
-    {
-        k = 0;
-        while (k < f->nColMax)
-        {
-            ft_printf("|%2d", f->map[j][k]);
-            k++;
-        }
-        ft_printf("|\n");
-        j++;
-    }
+	if (x == 1 || x == 2)
+		return(0);
+	else
+		return(1);
 }
 
-int ft_check_and_move(int dir, t_file *f)
-/*
-**	dir = 1 -> movimiento hacia delate, N fil - 1
-**	dir = 2 -> movimiento hacia derecha, E col + 1
-**	dir = 3 -> movimiento hacia abajo, S fil + 1
-**	dir = 4 -> movimiento hacia izquierda, W col - 1
-*/
+int ft_check_and_move(t_file *f)
 {
-	if (dir == 1)
+	double dirxAux;
+	double planexAux;
+
+	// arriba
+	if (f->mv.w == 1)
 	{
-		if(f->map[f->current_pos[0] - 1][f->current_pos[1]] == 3)
-		{
-			f->current_pos[0] = f->current_pos[0] - 1;
-			ft_printf("UP!!!\n");
-			return(0);
-		}
+		if (ft_canmove(f->map[(int)(f->ml.pos.x + f->ml.currentDir.x * MOV)][(int)f->ml.pos.y]))
+			f->ml.pos.x += f->ml.currentDir.x * MOV;
+		if (ft_canmove(f->map[(int)f->ml.pos.x][(int)(f->ml.pos.y + f->ml.currentDir.y * MOV)]))
+			f->ml.pos.y += f->ml.currentDir.y * MOV;
 	}
-	else if (dir == 2)
+	// abajo
+	if (f->mv.s == 1)
 	{
-		f->current_pos[1] = f->current_pos[1] + 1;
-		ft_printf("RIGHT!!!!\n");
-		return(0);
+		if (ft_canmove(f->map[(int)(f->ml.pos.x - f->ml.currentDir.x *MOV)][(int)f->ml.pos.y]))
+			f->ml.pos.x -= f->ml.currentDir.x * MOV;
+		if (ft_canmove(f->map[(int)f->ml.pos.x][(int)(f->ml.pos.y - f->ml.currentDir.y * MOV)]))
+			f->ml.pos.y -= f->ml.currentDir.y * MOV;
 	}
-	else if (dir == 3)
+	// dcha rot
+	if (f->mv.r == 1)
 	{
-		if(f->map[f->current_pos[0] + 1][f->current_pos[1]] == 3)
-		{
-			f->current_pos[0] = f->current_pos[0] + 1;
-			ft_printf("DOWN!!!\n");
-			return(0);
-		}
+		dirxAux = f->ml.currentDir.x;
+		planexAux = f->ml.plane.x;
+		f->ml.currentDir.x = f->ml.currentDir.x * cos(-ROT) - f->ml.currentDir.y * sin(-ROT);
+		f->ml.currentDir.y = dirxAux * sin(-ROT) + f->ml.currentDir.y * cos(-ROT);
+		f->ml.plane.x = f->ml.plane.x * cos(-ROT) - f->ml.plane.y * sin(-ROT);
+		f->ml.plane.y = planexAux * sin(-ROT) + f->ml.plane.y * cos(-ROT);
 	}
-	else if (dir == 4)
+	// izda rot
+	if (f->mv.l == 1)
 	{
-		if(f->map[f->current_pos[0]][f->current_pos[1] - 1] == 3)
-		{
-			f->current_pos[1] = f->current_pos[1] - 1;
-			ft_printf("LEFT!!!\n");
-			return(0);
-		}
+		dirxAux = f->ml.currentDir.x;
+		planexAux = f->ml.plane.x;
+		f->ml.currentDir.x = f->ml.currentDir.x * cos(ROT) - f->ml.currentDir.y * sin(ROT);
+		f->ml.currentDir.y = dirxAux * sin(ROT) + f->ml.currentDir.y * cos(ROT);
+		f->ml.plane.x = f->ml.plane.x * cos(ROT) - f->ml.plane.y * sin(ROT);
+		f->ml.plane.y = planexAux * sin(ROT) + f->ml.plane.y * cos(ROT);
 	}
+	// izda mov
+	if(f->mv.a == 1)
+	{
+		if (ft_canmove(f->map[(int)f->ml.pos.x][(int)(f->ml.pos.y + f->ml.currentDir.x * MOV)]))
+			f->ml.pos.y += f->ml.currentDir.x * MOV;
+		if (ft_canmove(f->map[(int)(f->ml.pos.x - f->ml.currentDir.y * MOV)][(int)f->ml.pos.y]))
+			f->ml.pos.x -= f->ml.currentDir.y * MOV;
+	}
+	// dcha mov
+	if(f->mv.d == 1)
+	{
+		if (ft_canmove(f->map[(int)f->ml.pos.x][(int)(f->ml.pos.y - f->ml.currentDir.x * MOV)]))
+			f->ml.pos.y -= f->ml.currentDir.x * MOV;
+		if (ft_canmove(f->map[(int)(f->ml.pos.x + f->ml.currentDir.y * MOV)][(int)f->ml.pos.y]))
+			f->ml.pos.x += f->ml.currentDir.y * MOV;
+	}
+	printf("pos[%f][%f]\n", f->ml.pos.x,f->ml.pos.y);
 	return(0);
 }
 
-int ft_handle_movement(int key, t_file *f)
+int ft_key_press(int key, t_file *f)
 {
-	if (key == KEY_ESC)
+	if (key == KEY_ESC) // TODO: salida segura del programa sin leaks
 		exit(0);
-	else if(key == KEY_W || key == KEY_UP)
-		ft_check_and_move(1, f);
-	else if(key == KEY_D || key == KEY_RIGHT)
-		ft_check_and_move(2, f);
-	else if(key == KEY_S || key == KEY_DOWN)
-		ft_check_and_move(3, f);
-	else if(key == KEY_A || key == KEY_LEFT)
-		ft_check_and_move(4, f);
-	//printf("pos[%d][%d]\n", f->current_pos[0], f->current_pos[1]);
-	mlx_clear_window(f->ml.mlx, f->ml.window);
-	ft_initraycast(f);
+	if(key == KEY_W)
+		f->mv.w = 1;
+	if(key == KEY_LEFT)
+		f->mv.l = 1;
+	if(key == KEY_S)
+		f->mv.s = 1;
+	if(key == KEY_RIGHT)
+		f->mv.r = 1;
+	if(key == KEY_D)
+		f->mv.d = 1;
+	if(key == KEY_A)
+		f->mv.a = 1;
+	return(0);
 }
 
+int ft_key_release(int key, t_file *f)
+{
+	if (key == KEY_ESC) // TODO: salida segura del programa sin leaks
+		exit(0);
+	if(key == KEY_W)
+		f->mv.w = 0;
+	if(key == KEY_RIGHT)
+		f->mv.r = 0;
+	if(key == KEY_S)
+		f->mv.s = 0;
+	if(key == KEY_LEFT)
+		f->mv.l = 0;
+	if(key == KEY_D)
+		f->mv.d = 0;
+	if(key == KEY_A)
+		f->mv.a = 0;
+	return (0);
+}
+
+int ft_move_and_draw(t_file *f)
+{
+	ft_check_and_move(f);
+	ft_initraycast(f);
+}

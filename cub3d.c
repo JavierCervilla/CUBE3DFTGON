@@ -84,15 +84,39 @@ void	ft_init_file_struct(t_file *f)
 	f->dir = '\0';
 	f->pos[0] = 0;
 	f->pos[1] = 0;
-	f->current_pos[0] = 1;
-	f->current_pos[1] = 1;
 	// Estructura auxiliar mlx
 	f->ml.pos.x = 0.0;
 	f->ml.pos.y = 0.0;
 	f->ml.currentDir.x = 0.0; 
     f->ml.currentDir.y = 0.0;
 	f->ml.plane.x = 0.0; 
-    f->ml.plane.y = 0.66;
+    f->ml.plane.y = 0.0;
+	f->ml.side = 0;
+	f->ml.ray.x = 0;
+	f->ml.ray.y = 0;
+	f->ml.deltaDist.x = 0;
+	f->ml.deltaDist.y = 0;
+	f->ml.raylength.x = 0;
+	f->ml.raylength.y = 0;
+	f->ml.step.x = 0;
+	f->ml.step.y = 0;
+	f->ml.cameraX = 0;
+	f->ml.mapX = 0;
+	f->ml.mapY = 0;
+	f->ml.lineHeight = 0;
+	f->ml.perpWallDist = 0;
+	f->ml.drawStart = 0;
+	f->ml.drawEnd = 0;
+	f->ml.side = 0;
+	f->ml.x = 0;
+	
+	// EStructura mov
+	f->mv.a = 0;
+	f->mv.d = 0;
+	f->mv.l = 0;
+	f->mv.r = 0;
+	f->mv.s = 0;
+	f->mv.w = 0;
 }
 
 void	ft_handle_error(char *str) //TODO:MODIFICAR STRERR
@@ -161,14 +185,19 @@ int	main(/*int argc, char *argv[]*/)
 	
 	if (ft_read(&f) == -1)
 		ft_handle_error("ERROR.Lectura del archivo");
-	debugging(&f);
-	if (!(f.ml.mlx = mlx_init()))
+	//debugging(&f);
+	if(!(f.ml.mlx = mlx_init()))
 		ft_handle_error("ERROR.MLX_INIT");
 	if(!(f.ml.window = mlx_new_window(f.ml.mlx, f.w, f.h, "CUB3D")))
 		ft_handle_error("ERROR.MLX_WINDOW");
+	//  declarar la imagen y obtener la data de la imagen
+	f.ml.img = mlx_new_image(f.ml.mlx, f.w, f.h);
+	f.ml.data_img = (int*)mlx_get_data_addr(f.ml.img, &f.ml.bitspp, &f.ml.size_line, &f.ml.end);
 	ft_initraycast(&f);
-	mlx_hook(f.ml.window, 2, 1, ft_handle_movement, &f);
-	//mlx_loop_hook(f.ml.mlx, ft_initraycast, &f);
+	mlx_do_key_autorepeatoff(f.ml.mlx);
+	mlx_hook(f.ml.window, 2, 1, ft_key_press, &f);
+	mlx_hook(f.ml.window, 3, 2, ft_key_release, &f);
+	mlx_loop_hook(f.ml.mlx, ft_move_and_draw, &f);
 	mlx_loop(f.ml.mlx);
 
 	return (0);
