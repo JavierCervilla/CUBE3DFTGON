@@ -15,6 +15,7 @@
 # include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <unistd.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
@@ -54,8 +55,22 @@
 
 /*-------------CONSTANTES--------------------------*/
 
-# define ROT 0.008
-# define MOV 0.013
+# define ROT 0.04
+# define MOV 0.04
+
+/*-------------ESTRUCTURA IMG----------------------*/
+
+typedef struct		s_img
+{
+	void	*img;					// instancia de la imagen
+	int		*data;					// data de la imagen
+	int		width;					// ancho de la textura
+	int		height;					// alto de la textura
+	int		*bits_per_pixel;		// bits per pixel
+	int		*size_line;				// tamaño de linea
+	int		*endian;				// endian
+}					t_img;
+
 
 /*-------------ESTRUCTURA VECTOR-------------------*/
 
@@ -94,6 +109,7 @@ typedef struct		s_mlx
 	int			color;					// color de los muros
 	int			x;						// contador para el bucle
 	int			side;					// side del muro
+	t_img		texture[4];				// array de imagenes de texturas.
 }					t_mlx;
 
 /*--------------ESTRUCTURA AUX MOVIMIENTO---------*/
@@ -131,7 +147,6 @@ typedef struct		s_readfile
 	int		nFil;				//  Numero de filas
 	char	*buff;				//  Buff auxiliar para guardar el mapa;
 	int		rtn;				//  retorno para funciones, -1 = ERROR
-	
 	/*---------------ESTRUCTURAS AUXILIARES-------------------------*/
 	
 	t_mlx	ml;					// estructura auxiliar para instancias de mlx

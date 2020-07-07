@@ -183,13 +183,13 @@ int	main(/*int argc, char *argv[]*/)
 {
 	t_file		f;  //	Declarar la estructura
 	
-	if (ft_read(&f) == -1)
-		ft_handle_error("ERROR.Lectura del archivo");
-	//debugging(&f);
 	if(!(f.ml.mlx = mlx_init()))
 		ft_handle_error("ERROR.MLX_INIT");
+	if (ft_read(&f) == -1)
+		ft_handle_error("ERROR.Lectura del archivo");
 	if(!(f.ml.window = mlx_new_window(f.ml.mlx, f.w, f.h, "CUB3D")))
 		ft_handle_error("ERROR.MLX_WINDOW");
+	//debugging(&f);
 	//  declarar la imagen y obtener la data de la imagen
 	f.ml.img = mlx_new_image(f.ml.mlx, f.w, f.h);
 	f.ml.data_img = (int*)mlx_get_data_addr(f.ml.img, &f.ml.bitspp, &f.ml.size_line, &f.ml.end);

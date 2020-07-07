@@ -50,7 +50,7 @@ void    ft_calc_step(t_file *f)
     f->ml.step.y = 0;
     f->ml.raylength.x = 0;
     f->ml.raylength.y = 0;
-    
+
     if (f->ml.ray.x < 0)
     {
         f->ml.step.x = -1;
@@ -130,7 +130,7 @@ void ft_draw_line(t_file *f)
         *(f->ml.data_img + (i * f->w) + f->ml.x) = 7719150;
         i++;
     }
-    while (i < f->ml.drawEnd)
+    while (i <= f->ml.drawEnd)
     {
         *(f->ml.data_img + (i * f->w) + f->ml.x) = f->ml.color;  
         i++;
@@ -183,7 +183,7 @@ int     ft_initraycast(t_file *f)
         if (f->ml.drawStart < 0)
             f->ml.drawStart = 0;
         f->ml.drawEnd = (f->ml.lineHeight / 2) +  f->h / 2;
-        if (f->ml.drawEnd >= f->h)
+        if (f->ml.drawEnd >= f->h || f->ml.drawEnd <= 0)
             f->ml.drawEnd = f->h - 1;
         // TODO: coloreando los muros y dando intesidades distintas a cada lado del muro(x e y)
         ft_color(f);

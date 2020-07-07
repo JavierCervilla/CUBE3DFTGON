@@ -76,6 +76,11 @@ int ft_handle_path_texture(t_file *f, int i)
 		ft_handle_error("The extension of Texture file is invalid\n");
 	if ((f->texture[i] = open(--aux, O_RDONLY)) < 0)
 		ft_handle_error("Error at opening Texture file\n");
+	else
+	{
+		f->ml.texture[i].img = mlx_xpm_file_to_image(f->ml.mlx, aux, &f->ml.texture[i].width, &f->ml.texture[i].height);
+		f->ml.texture[i].data = mlx_get_data_addr(f->ml.texture[i].img, &f->ml.texture[i].bits_per_pixel,&f->ml.texture[i].size_line, &f->ml.texture[i].endian);
+	}
 	while (*f->line)
 		f->line++;
 	return (f->rtn);
