@@ -17,7 +17,7 @@ INC_DIR		=	./includes/
 PRINTF_DIR 	=	$(INC_DIR)printf/
 
 #MLX_DIR		=	$(INC_DIR)mlx/
-MLX_DIR		=	/home/javi/minilibx/
+MLX_DIR		=	$(INC_DIR)minilibx-linux/
 CC			=	gcc
 FLAGS		=	-c -Wall -Wextra -Werror
 

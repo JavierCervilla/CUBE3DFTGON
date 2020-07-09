@@ -123,4 +123,5 @@ int ft_move_and_draw(t_file *f)
 {
 	ft_check_and_move(f);
 	ft_initraycast(f);
+	mlx_put_image_to_window(f->ml.mlx, f->ml.window, f->ml.frame.img, 0, 0);
 }

@@ -12,7 +12,7 @@
 
 #include "cub3d.h"
 
-int	ft_check_extension(char *str)
+int			ft_check_extension(char *str)
 {
 	char	*extensions;
 	int		rtn;
@@ -32,7 +32,7 @@ static void	ft_set_res(char **res, int j, t_file *f)
 		f->h = ft_atoi(res[j]);
 }
 
-int	ft_handle_resolution(t_file *f)
+int			ft_handle_resolution(t_file *f)
 {
 	char	**res;
 	int		i;
@@ -61,10 +61,10 @@ int	ft_handle_resolution(t_file *f)
 	return (f->rtn);
 }
 
-int ft_handle_path_texture(t_file *f, int i)
+int			ft_handle_path_texture(t_file *f, int i)
 {
-	char *aux;
-	char *ext;
+	char	*aux;
+	char	*ext;
 
 	if (!(f->line = ft_strchr(f->line, '.')))
 		ft_handle_error("Path of Texture is invalid\n");
@@ -78,18 +78,21 @@ int ft_handle_path_texture(t_file *f, int i)
 		ft_handle_error("Error at opening Texture file\n");
 	else
 	{
-		f->ml.texture[i].img = mlx_xpm_file_to_image(f->ml.mlx, aux, &f->ml.texture[i].width, &f->ml.texture[i].height);
-		f->ml.texture[i].data = mlx_get_data_addr(f->ml.texture[i].img, &f->ml.texture[i].bits_per_pixel,&f->ml.texture[i].size_line, &f->ml.texture[i].endian);
+		f->ml.text[i].img = mlx_xpm_file_to_image(f->ml.mlx, aux,
+			&f->ml.text[i].width, &f->ml.text[i].height);
+		f->ml.text[i].data = (int*)mlx_get_data_addr(f->ml.text[i].img,
+			&f->ml.text[i].bits_per_pixel,
+			&f->ml.text[i].size_line, &f->ml.text[i].endian);
 	}
 	while (*f->line)
 		f->line++;
 	return (f->rtn);
 }
 
-int ft_handle_path_spritex(t_file *f, int i)
+int			ft_handle_path_spritex(t_file *f, int i)
 {
-	char *aux;
-	char *ext;
+	char	*aux;
+	char	*ext;
 
 	if (!(f->line = ft_strchr(f->line, '.')))
 		ft_handle_error("Path of Spritex is invalid\n");
@@ -106,9 +109,8 @@ int ft_handle_path_spritex(t_file *f, int i)
 	return (f->rtn);
 }
 
-int ft_handle_textures(t_file *f)
+int			ft_handle_textures(t_file *f)
 {
-	ft_printf("entro_texturas\n");
 	while (*f->line)
 	{
 		if (*f->line == 'N' && *(f->line + 1) == 'O')
@@ -129,13 +131,13 @@ int ft_handle_textures(t_file *f)
 	return (f->rtn);
 }
 
-int ft_handle_spritex(t_file *f)
+int			ft_handle_spritex(t_file *f)
 {
-	ft_printf("entro_sprites\n");
 	int i;
 
 	i = 0;
-	if (!*f->line && (f->texture[0] >= 3 && f->texture[1] > f->texture[0] && f->texture[2] > f->texture[1]) && !f->sprite)
+	if (!*f->line && (f->texture[0] >= 3 && f->texture[1] > f->texture[0]
+		&& f->texture[2] > f->texture[1]) && !f->sprite)
 		f->line++;
 	while (*f->line)
 	{
@@ -147,102 +149,102 @@ int ft_handle_spritex(t_file *f)
 	}
 	return (f->rtn);
 }
-// TODO: SUSTITUIR POR FT_SPLIT
-int ft_handle_cfloor(t_file *f)
+
+static int	localisdigit(t_file *f, char **test)
 {
-	while (*f->line)
+	int		i;
+	int		j;
+	char	**aux;
+
+	aux = test;
+	i = 0;
+	j = 0;
+	while (i <= 2)
 	{
-		if (*f->line == 'F' && *(f->line + 1) == ' ')
+		j = 0;
+		while (aux[i][j])
 		{
-			ft_printf("entro_color_floor\n");
-			//char **res = ft_split(f->line, ' ');
-			//printf("%s", res[1]);
-			while (!(ft_isdigit(*f->line)))
-				f->line++;
-			if ((f->cf[0] = ft_atoi(f->line)) >= 0)
-				if (f->cf[0] > 255)
-					return ((f->rtn = -1));
-			if (!(f->line = ft_strchr(f->line, ',')))
+			if (!ft_isdigit(aux[i][j]))
 				return ((f->rtn = -1));
-			else
-			{
-				if ((f->cf[1] = ft_atoi(++f->line)) >= 0)
-					if (f->cf[1] > 255)
-						return ((f->rtn = -1));
-			}
-			if (!(f->line = ft_strchr(f->line, ',')))
-				return ((f->rtn = -1));
-			else
-			{
-				if ((f->cf[2] = ft_atoi(++f->line)) > 0)
-					if (f->cf[2] > 255)
-						return ((f->rtn = -1));
-			}
-			while (ft_isdigit(*f->line) && *f->line)
-				f->line++;
-			while (*f->line)
-			{
-				if (*f->line != ' ')
-					return ((f->rtn = -1));
-				f->line++;
-			}
+			j++;
 		}
-		if (*f->line)
-			f->line++;
+		j = 0;
+		i++;
 	}
 	return (f->rtn);
 }
 
-int ft_handle_croof(t_file *f)
+static int	localstrchr(const char *s, int c)
 {
-	while (*f->line)
+	int i;
+
+	i = 0;
+	while (*s)
 	{
-		if (*f->line == 'C' && *(f->line + 1) == ' ')
-		{
-			ft_printf("entro_color_roof\n");
-			while (!(ft_isdigit(*f->line)))
-				f->line++;
-			if ((f->cc[0] = ft_atoi(f->line)) >= 0)
-				if (f->cc[0] > 255)
-					return ((f->rtn = -1));
-			if (!(f->line = ft_strchr(f->line, ',')))
+		if (*s == (char)c)
+			i++;
+		s++;
+	}
+	return (i);
+}
+
+int			ft_handle_cfloor(t_file *f)
+{
+	char **test;
+	char **test2;
+
+	if (*f->line == 'F' && *f->line)
+	{
+		test = ft_split(f->line, ' ');
+		test2 = ft_split(test[1], ',');
+		if (localisdigit(f, test2) == -1 || localstrchr(test[1], ',') > 2
+			|| test2[3] != 0 || test[2] != 0)
+			return ((f->rtn = -1));
+		if ((f->cf[0] = ft_atoi(test2[0])) >= 0)
+			if (f->cf[0] > 255 || f->cf[0] < 0)
 				return ((f->rtn = -1));
-			else
-			{
-				if ((f->cc[1] = ft_atoi(++f->line)) >= 0)
-					if (f->cc[1] > 255)
-						return ((f->rtn = -1));
-			}
-			if (!(f->line = ft_strchr(f->line, ',')))
+		if ((f->cf[1] = ft_atoi(test2[1])) >= 0)
+			if (f->cf[1] > 255 || f->cf[1] < 0)
 				return ((f->rtn = -1));
-			else
-			{
-				if ((f->cc[2] = ft_atoi(++f->line)) > 0)
-					if (f->cc[2] > 255)
-						return ((f->rtn = -1));
-			}
-			while (ft_isdigit(*f->line) && *f->line)
-				f->line++;
-			while (*f->line)
-			{
-				if (*f->line != ' ')
-					return ((f->rtn = -1));
-				f->line++;
-			}
-		}
-		if (*f->line)
-			f->line++;
+		if ((f->cf[2] = ft_atoi(test2[2])) >= 0)
+			if (f->cf[2] > 255 || f->cf[2] < 0)
+				return ((f->rtn = -1));
 	}
 	return (f->rtn);
 }
 
-int ft_handle_rgb(t_file *f, int i)
+int			ft_handle_croof(t_file *f)
 {
-	char *tmp;
-	char *aux;
-	char **color;
-	int	 *rgb;
-	ft_printf("entro_rgb_2_hex\n");
+	char **test;
+	char **test2;
+
+	if (*f->line == 'C' && *f->line)
+	{
+		test = ft_split(f->line, ' ');
+		test2 = ft_split(test[1], ',');
+		if (localisdigit(f, test2) == -1 || localstrchr(test[1], ',') > 2
+			|| test2[3] != 0 || test[2] != 0)
+			return ((f->rtn = -1));
+		if ((f->cc[0] = ft_atoi(test2[0])) >= 0)
+			if (f->cc[0] > 255 || f->cc[0] < 0)
+				return ((f->rtn = -1));
+		if ((f->cc[1] = ft_atoi(test2[1])) >= 0)
+			if (f->cc[1] > 255 || f->cc[1] < 0)
+				return ((f->rtn = -1));
+		if ((f->cc[2] = ft_atoi(test2[2])) >= 0)
+			if (f->cc[2] > 255 || f->cc[2] < 0)
+				return ((f->rtn = -1));
+	}
+	return (f->rtn);
+}
+
+int			ft_handle_rgb(t_file *f, int i)
+{
+	char	*tmp;
+	char	*aux;
+	char	**color;
+	int		*rgb;
+
 	if (i == 1)
 	{
 		color = &f->c_f;
@@ -267,41 +269,35 @@ int ft_handle_rgb(t_file *f, int i)
 		}
 		i++;
 	}
-			;
 	return (f->rtn);
 }
 
-
-
-int ft_handle_map_read(t_file *f)
+int			ft_handle_map_read(t_file *f)
 {
-    int i;
-    char *temp;
-    //char *aux;
+	int		i;
+	char	*temp;
 
-    i = 0;
-    if (ft_isdigit(f->line[0]) || f->line[0] == ' ')
-    {
-        i = ft_strlen(f->line); // tamaño de la linea(num columnas)
-        if (f->buff == NULL)
-            temp = ft_strdup(f->line);
-        else
-            temp = ft_strjoin(f->buff, f->line);
-        free(f->buff);
-        f->buff = temp;
-        temp = ft_strjoin(f->buff, "\n");
-        free(f->buff);
-        f->buff = temp;
-        //f->buff = ft_strdup(aux);
-        // free(aux);
-        if (f->nColMax == 0 || f->nColMax < i)
-            f->nColMax = i;
-        f->nFil++;
-    }
+	i = 0;
+	if (ft_isdigit(f->line[0]) || f->line[0] == ' ')
+	{
+		i = ft_strlen(f->line); // tamaño de la linea(num columnas)
+		if (f->buff == NULL)
+			temp = ft_strdup(f->line);
+		else
+			temp = ft_strjoin(f->buff, f->line);
+		free(f->buff);
+		f->buff = temp;
+		temp = ft_strjoin(f->buff, "\n");
+		free(f->buff);
+		f->buff = temp;
+		if (f->nColMax == 0 || f->nColMax < i)
+			f->nColMax = i;
+		f->nFil++;
+	}
 	return (f->rtn);
 }
 
-static void ft_filling_matrix(t_file *f, int k, int i, int j)
+static void	ft_filling_matrix(t_file *f, int k, int i, int j)
 {
 	if (f->buff[k] == '0' || f->buff[k] == '1' || f->buff[k] == '2')
 	{
@@ -327,36 +323,33 @@ static void ft_filling_matrix(t_file *f, int k, int i, int j)
 	}
 }
 
-// TODO: REESCRIBIR CON CALLOC PARA REDUCIR LINEAS
-int alloc_map(t_file *f)
+int			alloc_map(t_file *f)
 {
-    int i; // recorrer filas
-    int j; // recorrer columnas
-    int k; // recorrer buffer
+	int i[3];
 
-    i = 0;
-    i = 0;
-    k = 0;
+	i[0] = 0;
+	i[1] = 0;
+	i[2] = 0;
 	if (!(f->map = ft_calloc(f->nFil, sizeof(int *))))
-		return(0);
-    else
-    {
-        while (i < f->nFil && f->buff[k])
-        {
-			if(!(f->map[i] = ft_calloc(f->nColMax, sizeof(int *))))
-				return(0);
-            j = 0;
-            while (j < f->nColMax && f->buff[k] != '\n')
-            {
-                ft_filling_matrix(f,k,i,j);
-                k++;
-                j++;
-            }
-            k++;
-            i++;
-        }
-    }
-    return (0);
+		return (0);
+	else
+	{
+		while (i[0] < f->nFil && f->buff[i[2]])
+		{
+			if (!(f->map[i[0]] = ft_calloc(f->nColMax, sizeof(int *))))
+				return (0);
+			i[1] = 0;
+			while (i[1] < f->nColMax && f->buff[i[2]] != '\n')
+			{
+				ft_filling_matrix(f, i[2], i[0], i[1]);
+				i[2]++;
+				i[1]++;
+			}
+			i[2]++;
+			i[0]++;
+		}
+	}
+	return (0);
 }
 
 /*
@@ -364,14 +357,16 @@ int alloc_map(t_file *f)
 **	devuelve 0 por default y -1 en error.
 */
 
-int ft_read_src_file(t_file *f)
+int			ft_read_src_file(t_file *f)
 {
-	if (!f->w && !f->h) // TODO :COMPROBAR POR ARCHIVO
+	if (!f->w && !f->h)
 	{
-		if ((ft_handle_resolution(f)) == -1 || f->w < 200 || f->w > 1920 || f->h < 200 || f->h > 1080)
+		if ((ft_handle_resolution(f)) == -1 || f->w < 200 ||
+			f->w > 1920 || f->h < 200 || f->h > 1080)
 			ft_handle_error("Res. ERROR while reading file. Bitch...\n");
 	}
-	else if (!f->texture[0] || !f->texture[1] || !f->texture[2] || !f->texture[3])
+	else if (!f->texture[0] || !f->texture[1] || !f->texture[2]
+		|| !f->texture[3])
 	{
 		if ((ft_handle_textures(f)) == -1)
 			ft_handle_error("Text. ERROR while reading file. Nerd...\n");
@@ -381,7 +376,13 @@ int ft_read_src_file(t_file *f)
 		if ((ft_handle_spritex(f)) == -1)
 			ft_handle_error("Text. ERROR while reading file. Nerd...\n");
 	}
-	else if (f->cf[0] == -1|| f->cf[1] == -1|| f->cf[2] == -1)
+	ft_read_src_file2(f);
+	return (f->rtn);
+}
+
+int			ft_read_src_file2(t_file *f)
+{
+	if (f->cf[0] == -1 || f->cf[1] == -1 || f->cf[2] == -1)
 	{
 		if ((ft_handle_cfloor(f)) == -1)
 			ft_handle_error("Text. ERROR while reading file. Nerd...\n");
