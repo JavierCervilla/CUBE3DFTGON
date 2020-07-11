@@ -1,127 +1,147 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   ft_move.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <jcervill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: javi <javi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 01:34:16 by jcervill          #+#    #+#             */
-/*   Updated: 2020/03/30 12:41:29 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/11 17:03:21 by javi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int ft_canmove(int x)
+int			ft_canmove(int x)
 {
 	if (x == 1 || x == 2)
-		return(0);
+		return (0);
 	else
-		return(1);
+		return (1);
 }
 
-int ft_check_and_move(t_file *f)
+static void	ft_move_up(t_file *f)
 {
-	double dirxAux;
-	double planexAux;
+	if (ft_canmove(f->map[(int)(f->ml.pos.x + f->ml.dir.x * MOV)]
+		[(int)f->ml.pos.y]))
+		f->ml.pos.x += f->ml.dir.x * MOV;
+	if (ft_canmove(f->map[(int)f->ml.pos.x]
+		[(int)(f->ml.pos.y + f->ml.dir.y * MOV)]))
+		f->ml.pos.y += f->ml.dir.y * MOV;
+}
 
-	// arriba
+static void	ft_move_dwn(t_file *f)
+{
+	if (ft_canmove(f->map[(int)(f->ml.pos.x - f->ml.dir.x * MOV)]
+		[(int)f->ml.pos.y]))
+		f->ml.pos.x -= f->ml.dir.x * MOV;
+	if (ft_canmove(f->map[(int)f->ml.pos.x]
+		[(int)(f->ml.pos.y - f->ml.dir.y * MOV)]))
+		f->ml.pos.y -= f->ml.dir.y * MOV;
+}
+
+static void	ft_rot_r(t_file *f, double dirxaux, double planexaux)
+{
+	dirxaux = f->ml.dir.x;
+	planexaux = f->ml.plane.x;
+	f->ml.dir.x = f->ml.dir.x * cos(-ROT) - f->ml.dir.y * sin(-ROT);
+	f->ml.dir.y = dirxaux * sin(-ROT) + f->ml.dir.y * cos(-ROT);
+	f->ml.plane.x = f->ml.plane.x * cos(-ROT) - f->ml.plane.y * sin(-ROT);
+	f->ml.plane.y = planexaux * sin(-ROT) + f->ml.plane.y * cos(-ROT);
+}
+
+static void	ft_rot_l(t_file *f, double dirxaux, double planexaux)
+{
+	dirxaux = f->ml.dir.x;
+	planexaux = f->ml.plane.x;
+	f->ml.dir.x = f->ml.dir.x * cos(ROT) - f->ml.dir.y * sin(ROT);
+	f->ml.dir.y = dirxaux * sin(ROT) + f->ml.dir.y * cos(ROT);
+	f->ml.plane.x = f->ml.plane.x * cos(ROT) - f->ml.plane.y * sin(ROT);
+	f->ml.plane.y = planexaux * sin(ROT) + f->ml.plane.y * cos(ROT);
+}
+
+static void	ft_move_l(t_file *f)
+{
+	if (ft_canmove(f->map[(int)f->ml.pos.x]
+		[(int)(f->ml.pos.y + f->ml.dir.x * MOV)]))
+		f->ml.pos.y += f->ml.dir.x * MOV;
+	if (ft_canmove(f->map[(int)(f->ml.pos.x - f->ml.dir.y * MOV)]
+		[(int)f->ml.pos.y]))
+		f->ml.pos.x -= f->ml.dir.y * MOV;
+}
+
+static void	ft_move_r(t_file *f)
+{
+	if (ft_canmove(f->map[(int)f->ml.pos.x]
+		[(int)(f->ml.pos.y - f->ml.dir.x * MOV)]))
+		f->ml.pos.y -= f->ml.dir.x * MOV;
+	if (ft_canmove(f->map[(int)(f->ml.pos.x + f->ml.dir.y * MOV)]
+		[(int)f->ml.pos.y]))
+		f->ml.pos.x += f->ml.dir.y * MOV;
+}
+
+int			ft_check_and_move(t_file *f)
+{
+	double dirxaux;
+	double planexaux;
+
 	if (f->mv.w == 1)
-	{
-		if (ft_canmove(f->map[(int)(f->ml.pos.x + f->ml.currentDir.x * MOV)][(int)f->ml.pos.y]))
-			f->ml.pos.x += f->ml.currentDir.x * MOV;
-		if (ft_canmove(f->map[(int)f->ml.pos.x][(int)(f->ml.pos.y + f->ml.currentDir.y * MOV)]))
-			f->ml.pos.y += f->ml.currentDir.y * MOV;
-	}
-	// abajo
+		ft_move_up(f);
 	if (f->mv.s == 1)
-	{
-		if (ft_canmove(f->map[(int)(f->ml.pos.x - f->ml.currentDir.x *MOV)][(int)f->ml.pos.y]))
-			f->ml.pos.x -= f->ml.currentDir.x * MOV;
-		if (ft_canmove(f->map[(int)f->ml.pos.x][(int)(f->ml.pos.y - f->ml.currentDir.y * MOV)]))
-			f->ml.pos.y -= f->ml.currentDir.y * MOV;
-	}
-	// dcha rot
+		ft_move_dwn(f);
 	if (f->mv.r == 1)
-	{
-		dirxAux = f->ml.currentDir.x;
-		planexAux = f->ml.plane.x;
-		f->ml.currentDir.x = f->ml.currentDir.x * cos(-ROT) - f->ml.currentDir.y * sin(-ROT);
-		f->ml.currentDir.y = dirxAux * sin(-ROT) + f->ml.currentDir.y * cos(-ROT);
-		f->ml.plane.x = f->ml.plane.x * cos(-ROT) - f->ml.plane.y * sin(-ROT);
-		f->ml.plane.y = planexAux * sin(-ROT) + f->ml.plane.y * cos(-ROT);
-	}
-	// izda rot
+		ft_rot_r(f, dirxaux, planexaux);
 	if (f->mv.l == 1)
-	{
-		dirxAux = f->ml.currentDir.x;
-		planexAux = f->ml.plane.x;
-		f->ml.currentDir.x = f->ml.currentDir.x * cos(ROT) - f->ml.currentDir.y * sin(ROT);
-		f->ml.currentDir.y = dirxAux * sin(ROT) + f->ml.currentDir.y * cos(ROT);
-		f->ml.plane.x = f->ml.plane.x * cos(ROT) - f->ml.plane.y * sin(ROT);
-		f->ml.plane.y = planexAux * sin(ROT) + f->ml.plane.y * cos(ROT);
-	}
-	// izda mov
-	if(f->mv.a == 1)
-	{
-		if (ft_canmove(f->map[(int)f->ml.pos.x][(int)(f->ml.pos.y + f->ml.currentDir.x * MOV)]))
-			f->ml.pos.y += f->ml.currentDir.x * MOV;
-		if (ft_canmove(f->map[(int)(f->ml.pos.x - f->ml.currentDir.y * MOV)][(int)f->ml.pos.y]))
-			f->ml.pos.x -= f->ml.currentDir.y * MOV;
-	}
-	// dcha mov
-	if(f->mv.d == 1)
-	{
-		if (ft_canmove(f->map[(int)f->ml.pos.x][(int)(f->ml.pos.y - f->ml.currentDir.x * MOV)]))
-			f->ml.pos.y -= f->ml.currentDir.x * MOV;
-		if (ft_canmove(f->map[(int)(f->ml.pos.x + f->ml.currentDir.y * MOV)][(int)f->ml.pos.y]))
-			f->ml.pos.x += f->ml.currentDir.y * MOV;
-	}
-	printf("pos[%f][%f]\n", f->ml.pos.x,f->ml.pos.y);
-	return(0);
+		ft_rot_l(f, dirxaux, planexaux);
+	if (f->mv.a == 1)
+		ft_move_l(f);
+	if (f->mv.d == 1)
+		ft_move_r(f);
+	return (0);
 }
 
-int ft_key_press(int key, t_file *f)
+int			ft_key_press(int key, t_file *f)
 {
-	if (key == KEY_ESC) // TODO: salida segura del programa sin leaks
+	if (key == KEY_ESC)
 		exit(0);
-	if(key == KEY_W)
+	if (key == KEY_W)
 		f->mv.w = 1;
-	if(key == KEY_LEFT)
+	if (key == KEY_LEFT)
 		f->mv.l = 1;
-	if(key == KEY_S)
+	if (key == KEY_S)
 		f->mv.s = 1;
-	if(key == KEY_RIGHT)
+	if (key == KEY_RIGHT)
 		f->mv.r = 1;
-	if(key == KEY_D)
+	if (key == KEY_D)
 		f->mv.d = 1;
-	if(key == KEY_A)
+	if (key == KEY_A)
 		f->mv.a = 1;
-	return(0);
+	return (0);
 }
 
-int ft_key_release(int key, t_file *f)
+int			ft_key_release(int key, t_file *f)
 {
-	if (key == KEY_ESC) // TODO: salida segura del programa sin leaks
+	if (key == KEY_ESC)
 		exit(0);
-	if(key == KEY_W)
+	if (key == KEY_W)
 		f->mv.w = 0;
-	if(key == KEY_RIGHT)
+	if (key == KEY_RIGHT)
 		f->mv.r = 0;
-	if(key == KEY_S)
+	if (key == KEY_S)
 		f->mv.s = 0;
-	if(key == KEY_LEFT)
+	if (key == KEY_LEFT)
 		f->mv.l = 0;
-	if(key == KEY_D)
+	if (key == KEY_D)
 		f->mv.d = 0;
-	if(key == KEY_A)
+	if (key == KEY_A)
 		f->mv.a = 0;
 	return (0);
 }
 
-int ft_move_and_draw(t_file *f)
+int			ft_move_and_draw(t_file *f)
 {
 	ft_check_and_move(f);
 	ft_initraycast(f);
+	//ft_sprite_rc(f);
 	mlx_put_image_to_window(f->ml.mlx, f->ml.window, f->ml.frame.img, 0, 0);
 }

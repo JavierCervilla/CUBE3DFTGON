@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <jcervill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcervill <jcervill@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 01:34:16 by jcervill          #+#    #+#             */
-/*   Updated: 2020/03/30 12:41:29 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/11 19:07:31 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@
 # define ROT 0.04
 # define MOV 0.06
 
+
 /*-------------ESTRUCTURA IMG----------------------*/
 
 typedef struct		s_img
@@ -81,53 +82,65 @@ typedef struct		s_vector
 	double	y;							// componente y
 }					t_vector;
 
+/*------------ESTRUCRTURA SPRITE-------------------*/
+
+typedef struct		s_sprite
+{
+	t_vector		pos;
+	
+}					t_sprite;
+
+
+
 /*-------------ESTRUCTURA AUX MLX------------------*/
 
 typedef struct		s_mlx
 {
-	int				bitspp;					// bits por pixel (mlx: get data addr)
-	int				size_line;				// tamaño de line (mlx: get data addr)
-	int				end;					// end (mlx: get data addr)
-	void			*mlx;					// instancia de mlx
-	void			*window;				// instancia de ventana
-	t_vector		plane;					// camera plane
-	t_vector		pos;					// posicion actual
-	t_vector		currentDir;				// direccion del
-	t_vector		ray;					// rayo 
-	t_vector		deltaDist;				// distancia entre xs o ys 
-	t_vector		raylength;				// distancia del rayo
-	t_vector		step;					// ray components -1 if neg +1 if pos
-	t_vector		map;					// cuadro del mapa: X Columnas, Y Filas
-	double			cameraX;				// coordenada x en camera
-	int				lineHeight;				// altura de la linea a dibujar
-	double			perpWallDist;			// distancia ortogonal
-	int				drawStart;				// primer pixel donde tiene que pintar
-	int				drawEnd;				// ultimo pixel a pintar
-	int				color;					// color de los muros
-	int				x;						// contador para el bucle
-	int				side;					// side del muro
-	t_img			frame;					// frame de pantalla, se pushea a la window
-	t_img			text[4];				// array de imagenes de texturas:
-											//   [0] NO ./north_texture [1] SO ./south_texture
-											//   [2] WE ./west_texture  [3] EA ./east_texture
-	int				t_side;					// indice de textura
-	double			wallx;					// punto exacto donde golpea el rayo
-	int				textx;					// columnas dentro de texturas
-	int				textY;					// filas dentro de texturas
-	double			textStep;				// paso de coordenadas por pixel
-	double			textPos;				// posicion de la textura
+	int				bitspp;						// bits por pixel (mlx: get data addr)
+	int				size_line;					// tamaño de line (mlx: get data addr)
+	int				end;						// end (mlx: get data addr)
+	void			*mlx;						// instancia de mlx
+	void			*window;					// instancia de ventana
+	t_vector		plane;						// camera plane
+	t_vector		pos;						// posicion actual
+	t_vector		dir;						// direccion del
+	t_vector		ray;						// rayo 
+	t_vector		deltadist;					// distancia entre xs o ys 
+	t_vector		raylength;					// distancia del rayo
+	t_vector		step;						// ray components -1 if neg +1 if pos
+	t_vector		map;						// cuadro del mapa: X Columnas, Y Filas
+	double			camerax;					// coordenada x en camera
+	int				lineheight;					// altura de la linea a dibujar
+	double			perpwalldist;				// distancia ortogonal
+	int				drawStart;					// primer pixel donde tiene que pintar
+	int				drawEnd;					// ultimo pixel a pintar
+	int				color;						// color de los muros
+	int				x;							// contador para el bucle
+	int				side;						// side del muro
+	t_img			frame;						// frame de pantalla, se pushea a la window
+	t_img			text[5];					// array de imagenes de texturas:
+												//   [0] NO ./north_texture [1] SO ./south_texture
+												//   [2] WE ./west_texture  [3] EA ./east_texture
+												//	 [4] S textura sprite
+	t_sprite		*sp;						// array de estructuras de sprites
+	int				t_side;						// indice de textura
+	double			wallx;						// punto exacto donde golpea el rayo
+	int				textx;						// columnas dentro de texturas
+	int				texty;						// filas dentro de texturas
+	double			textstep;					// paso de coordenadas por pixel
+	double			textPos;					// posicion de la textura
 }					t_mlx;
 
 /*--------------ESTRUCTURA AUX MOVIMIENTO---------*/
 
 typedef struct		s_mov
 {
-	int				a;						// movimiento izquierda
-	int				s;						// movimiento abajo
-	int				w;						// movimiento alante
-	int				d;						// movimiento derecha
-	int				r;						// rotacion derecha
-	int				l;						// rotacion izquierda
+	int				a;							// movimiento izquierda
+	int				s;							// movimiento abajo
+	int				w;							// movimiento alante
+	int				d;							// movimiento derecha
+	int				r;							// rotacion derecha
+	int				l;							// rotacion izquierda
 }					t_mov;
 
 /*--------------ESTRUCTURA PRINCIPAL--------------*/
@@ -154,10 +167,12 @@ typedef struct		s_readfile
 	int				nFil;						//  Numero de filas
 	char			*buff;						//  Buff auxiliar para guardar el mapa;
 	int				rtn;						//  retorno para funciones, -1 = ERROR
+	int				sprite_num;					//  numero de sprites
 	/*---------------ESTRUCTURAS AUXILIARES-------------------------*/
 	
 	t_mlx			ml;							// estructura auxiliar para instancias de mlx
 	t_mov			mv;							// estructura auxiliar para los movimientos, cada vez que se genera un evento se crea esta estructura
+	
 }					t_file;
 
 /*

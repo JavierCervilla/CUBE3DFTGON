@@ -3,60 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <jcervill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcervill <jcervill@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 02:56:54 by dgomez            #+#    #+#             */
-/*   Updated: 2020/03/30 12:42:33 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/11 19:08:05 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-/*
-** Paso 1, leer la resolución:
-	posibles errores:
-		No existe R
-		No puede haber negativos
-		Más de dos números || menos de dos números
-		mayor que 200px y < 1920 para el ancho
-		mayor que 200px y < 1080px para el alto
-	Paso 2, leer texturas y guardarlas en un array
-	$dir = [NO, SO, WE, EA]
-	posibles errores:
-		no encuentra $dir[x]
-		no encuentra "./"
-		Intenta abrir el archivo, crea un array de FD si son válidos
-	Paso 3, leer el Sprite
-	par amanejar varios archivos tendremos la funcion get_sprites()
-	que guarda los FD válidos en un array de enteros. Si existe un invalido
-	exit(0);
-	posibles errores:
-		No encunetra S
-		que no encuentra el ./
-		que no pueda abrir el archivo de la dirección
-		que la extensión de archivos no sea imagen
-	Paso 4, leer el color Floor
-		hacemo atoi hasta la coma, miramos que el numero sea
-		> 0 y < 255, si eso es verdad, le hacemos ft_dec_hex a cada numero
-		posibles errores:
-			si hay mas de tres numeros, error.
-			que alguno de los nuero sea < 0 o > 255
-			que sean menos de tres numeros
-	Paso 5, leer el color Cielo
-		mismas condiciones de paso 4
-	Paso 6, leer el mapa
-		el mapa sabemos que puede contener 4 caracteres:
-			0				espacio vacio
-			1				muros
-			2				objeto / sprite
-			[N, S, E, W]	orientacion inicial del jugador
-		posibles errores:
-			solo puede tener una sola letra de las validas.
-			el mapa debe estar encerrado x muros(1)
-				·para comprobar esto utilizamos el algoritmo de flood filling
-
-
-* */
 
 void	ft_init_file_struct(t_file *f)
 {
@@ -84,36 +38,8 @@ void	ft_init_file_struct(t_file *f)
 	f->dir = '\0';
 	f->pos[0] = 0;
 	f->pos[1] = 0;
-	// Estructura auxiliar mlx
-	f->ml.pos.x = 0.0;
-	f->ml.pos.y = 0.0;
-	f->ml.currentDir.x = 0.0; 
-    f->ml.currentDir.y = 0.0;
-	f->ml.plane.x = 0.0; 
-    f->ml.plane.y = 0.0;
-	f->ml.side = 0;
-	f->ml.ray.x = 0;
-	f->ml.ray.y = 0;
-	f->ml.deltaDist.x = 0;
-	f->ml.deltaDist.y = 0;
-	f->ml.raylength.x = 0;
-	f->ml.raylength.y = 0;
-	f->ml.step.x = 0;
-	f->ml.step.y = 0;
-	f->ml.cameraX = 0;
-	f->ml.map.x = 0;
-	f->ml.map.y = 0;
-	f->ml.lineHeight = 0;
-	f->ml.perpWallDist = 0;
-	f->ml.drawStart = 0;
-	f->ml.drawEnd = 0;
-	f->ml.side = 0;
-	f->ml.x = 0;
-	f->ml.t_side = 0;
-	f->ml.textx = 0;
-	f->ml.textY = 0;
-	f->ml.textStep = 0.0;
-	
+	f->sprite = 0;
+	f->sprite_num = 0;
 	// EStructura mov
 	f->mv.a = 0;
 	f->mv.d = 0;
@@ -121,6 +47,39 @@ void	ft_init_file_struct(t_file *f)
 	f->mv.r = 0;
 	f->mv.s = 0;
 	f->mv.w = 0;
+}
+
+void	ft_init_mlx_struct(t_file *f)
+{
+	// Estructura auxiliar mlx
+	f->ml.pos.x = 0.0;
+	f->ml.pos.y = 0.0;
+	f->ml.dir.x = 0.0; 
+    f->ml.dir.y = 0.0;
+	f->ml.plane.x = 0.0; 
+    f->ml.plane.y = 0.0;
+	f->ml.side = 0;
+	f->ml.ray.x = 0;
+	f->ml.ray.y = 0;
+	f->ml.deltadist.x = 0;
+	f->ml.deltadist.y = 0;
+	f->ml.raylength.x = 0;
+	f->ml.raylength.y = 0;
+	f->ml.step.x = 0;
+	f->ml.step.y = 0;
+	f->ml.camerax = 0;
+	f->ml.map.x = 0;
+	f->ml.map.y = 0;
+	f->ml.lineheight = 0;
+	f->ml.perpwalldist = 0;
+	f->ml.drawStart = 0;
+	f->ml.drawEnd = 0;
+	f->ml.side = 0;
+	f->ml.x = 0;
+	f->ml.t_side = 0;
+	f->ml.textx = 0;
+	f->ml.texty = 0;
+	f->ml.textstep = 0.0;
 }
 
 void	ft_handle_error(char *str) //TODO:MODIFICAR STRERR
@@ -136,6 +95,7 @@ void		ft_handle_colors(t_file *f)
 	if ((ft_handle_rgb(f, 2)) == -1)
 		ft_handle_error("Text. ERROR while parsing rgb to hex\n");
 }
+
 /* DEBUGGING*/
 void debugging(t_file *f)
 {
@@ -183,7 +143,7 @@ int	ft_read(t_file *f)
 int	main(/*int argc, char *argv[]*/)
 {
 	t_file		f;  //	Declarar la estructura
-	
+
 	if(!(f.ml.mlx = mlx_init()))
 		ft_handle_error("ERROR.MLX_INIT");
 	if (ft_read(&f) == -1)

@@ -3,12 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   ft_read_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <jcervill@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcervill <jcervill@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/10 03:59:29 by dgomez            #+#    #+#             */
-/*   Updated: 2020/03/30 12:34:31 by jcervill         ###   ########.fr       */
+/*   Created: 2020/03/10 03:59:29 by jcervill          #+#    #+#             */
+/*   Updated: 2020/07/11 19:03:33 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/*
+** Paso 1, leer la resolución:
+**	posibles errores:
+**		No existe R
+**		No puede haber negativos
+**		Más de dos números || menos de dos números
+**		mayor que 200px y < 1920 para el ancho
+**		mayor que 200px y < 1080px para el alto
+**	Paso 2, leer texturas y guardarlas en un array
+**	$dir = [NO, SO, WE, EA]
+**	posibles errores:
+**		no encuentra $dir[x]
+**		no encuentra "./"
+**		Intenta abrir el archivo, crea un array de FD si son válidos
+**	Paso 3, leer el Sprite
+**	par amanejar varios archivos tendremos la funcion get_sprites()
+**	que guarda los FD válidos en un array de enteros. Si existe un invalido
+**	exit(0);
+**	posibles errores:
+**		No encunetra S
+**		que no encuentra el ./
+**		que no pueda abrir el archivo de la dirección
+**		que la extensión de archivos no sea imagen
+**	Paso 4, leer el color Floor
+**		hacemo atoi hasta la coma, miramos que el numero sea
+**		> 0 y < 255, si eso es verdad, le hacemos ft_dec_hex a cada numero
+**		posibles errores:
+**			si hay mas de tres numeros, error.
+**			que alguno de los nuero sea < 0 o > 255
+**			que sean menos de tres numeros
+**	Paso 5, leer el color Cielo
+**		mismas condiciones de paso 4
+**	Paso 6, leer el mapa
+**		el mapa sabemos que puede contener 4 caracteres:
+**			0				espacio vacio
+**			1				muros
+**			2				objeto / sprite
+**			[N, S, E, W]	orientacion inicial del jugador
+**		posibles errores:
+**			solo puede tener una sola letra de las validas.
+**			el mapa debe estar encerrado x muros(1)
+**			para comprobar esto utilizamos el algoritmo de flood filling
+*/
 
 #include "cub3d.h"
 
@@ -83,6 +127,7 @@ int			ft_handle_path_texture(t_file *f, int i)
 		f->ml.text[i].data = (int*)mlx_get_data_addr(f->ml.text[i].img,
 			&f->ml.text[i].bits_per_pixel,
 			&f->ml.text[i].size_line, &f->ml.text[i].endian);
+		close(f->texture[i]);
 	}
 	while (*f->line)
 		f->line++;
@@ -104,6 +149,15 @@ int			ft_handle_path_spritex(t_file *f, int i)
 		ft_handle_error("The extension of Spritex file is invalid\n");
 	if ((f->sprite = open(--aux, O_RDONLY)) < 0)
 		ft_handle_error("Error at opening Spritex file\n");
+	else
+	{
+		f->ml.text[4].img = mlx_xpm_file_to_image(f->ml.mlx, aux,
+			&f->ml.text[i].width, &f->ml.text[i].height);
+		f->ml.text[4].data = (int*)mlx_get_data_addr(f->ml.text[i].img,
+			&f->ml.text[i].bits_per_pixel,
+			&f->ml.text[i].size_line, &f->ml.text[i].endian);
+		close(f->sprite);
+	}
 	while (*f->line)
 		f->line++;
 	return (f->rtn);
@@ -272,6 +326,13 @@ int			ft_handle_rgb(t_file *f, int i)
 	return (f->rtn);
 }
 
+/*
+** int		ft_handle_map_read(t_file *f)
+** input:	struct t_file f
+** output:	1 if right -1 if wrong
+** do: 		take the line of the map and add to buffer, counts the rows and cols
+*/
+
 int			ft_handle_map_read(t_file *f)
 {
 	int		i;
@@ -297,11 +358,18 @@ int			ft_handle_map_read(t_file *f)
 	return (f->rtn);
 }
 
+/*
+** static void	ft_filling_matrix(t_file *f, int k, int i, int j)
+** input: struct t_file f, int k(buffer), int i(row),
+*/
+
 static void	ft_filling_matrix(t_file *f, int k, int i, int j)
 {
 	if (f->buff[k] == '0' || f->buff[k] == '1' || f->buff[k] == '2')
 	{
 		f->map[i][j] = (int)f->buff[k] - '0';
+		if (f->buff[k] == '2')
+			f->sprite_num++;
 	}
 	else if (f->buff[k] == ' ')
 	{
