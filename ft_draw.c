@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_draw.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: javi <javi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 01:34:16 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/11 17:40:53 by javi             ###   ########.fr       */
+/*   Updated: 2020/07/14 01:44:23 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static void		ft_cast_init_dir2(t_file *f)
 		f->ml.plane.x = 0.66;
 		f->ml.plane.y = 0.0;
 	}
+	if (!(f->ml.zbuff = (double*)malloc(sizeof(double) * f->w)))
+		ft_handle_error("MALLOC ERR. zbuff");
 }
 
 void		ft_cast_init_dir(t_file *f)
@@ -157,7 +159,7 @@ void		ft_draw_line(t_file *f)
 		*(f->ml.frame.data + (i * f->w) + f->ml.x) = 7719150;
 		i++;
 	}
-	while (i < f->ml.drawEnd)
+	while (i <= f->ml.drawEnd)
 	{
 		f->ml.texty = (int)f->ml.textPos &
 			(f->ml.text[f->ml.t_side].height - 1);
@@ -167,7 +169,7 @@ void		ft_draw_line(t_file *f)
 		*(f->ml.frame.data + (i * f->w) + f->ml.x) = color;
 		i++;
 	}
-	while (i < f->h)
+	while (i <= f->h)
 	{
 		*(f->ml.frame.data + (i * f->w) + f->ml.x) = 7364912;
 		i++;
@@ -199,7 +201,7 @@ static void ft_fixing_def(t_file *f)
 	if (f->ml.drawStart < 0)
 		f->ml.drawStart = 0;
 	f->ml.drawEnd = (f->ml.lineheight / 2) + f->h / 2;
-	if (f->ml.drawEnd >= f->h || f->ml.drawEnd <= 0)
+	if (f->ml.drawEnd > f->h || f->ml.drawEnd == 0)
 		f->ml.drawEnd = f->h - 1;
 }
 
@@ -208,7 +210,7 @@ int			ft_initraycast(t_file *f)
 	int hit; // detecta la colision con el muro
 
 	f->ml.x = 0;
-	while (f->ml.x <= f->w) // raycast
+	while (f->ml.x < f->w) // raycast
 	{
 		// colision
 		hit = 0;
@@ -226,6 +228,7 @@ int			ft_initraycast(t_file *f)
 		ft_set_wall(f);
 		ft_texture_config(f);
 		ft_draw_line(f);
+		f->ml.zbuff[f->ml.x] = f->ml.perpwalldist;
 		f->ml.x++;
-	}
+	}	
 }

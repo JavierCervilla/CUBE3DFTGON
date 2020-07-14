@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_move.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: javi <javi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 01:34:16 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/11 17:03:21 by javi             ###   ########.fr       */
+/*   Updated: 2020/07/14 01:35:40 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int			ft_canmove(int x)
 {
-	if (x == 1 || x == 2)
+	if (x == 1)
 		return (0);
 	else
 		return (1);
@@ -141,7 +141,13 @@ int			ft_key_release(int key, t_file *f)
 int			ft_move_and_draw(t_file *f)
 {
 	ft_check_and_move(f);
-	ft_initraycast(f);
-	//ft_sprite_rc(f);
+	if (f->mv.a || f->mv.s || f->mv.d || f->mv.w || f->mv.l || f->mv.r)
+	{ 
+		mlx_destroy_image(f->ml.mlx, f->ml.frame.img);
+		f->ml.frame.img = mlx_new_image(f->ml.mlx, f->w, f->h);
+		f->ml.frame.data = (int*)mlx_get_data_addr(f->ml.frame.img, &f->ml.bitspp, &f->ml.size_line, &f->ml.end);
+		ft_initraycast(f);
+		ft_sprite(f);
+	}
 	mlx_put_image_to_window(f->ml.mlx, f->ml.window, f->ml.frame.img, 0, 0);
 }

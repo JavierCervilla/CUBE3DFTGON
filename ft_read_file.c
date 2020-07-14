@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_read_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <jcervill@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 03:59:29 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/11 19:03:33 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/14 01:04:25 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,10 +152,10 @@ int			ft_handle_path_spritex(t_file *f, int i)
 	else
 	{
 		f->ml.text[4].img = mlx_xpm_file_to_image(f->ml.mlx, aux,
-			&f->ml.text[i].width, &f->ml.text[i].height);
-		f->ml.text[4].data = (int*)mlx_get_data_addr(f->ml.text[i].img,
-			&f->ml.text[i].bits_per_pixel,
-			&f->ml.text[i].size_line, &f->ml.text[i].endian);
+			&f->ml.text[4].width, &f->ml.text[4].height);
+		f->ml.text[4].data = (int*)mlx_get_data_addr(f->ml.text[4].img,
+			&f->ml.text[4].bits_per_pixel,
+			&f->ml.text[4].size_line, &f->ml.text[4].endian);
 		close(f->sprite);
 	}
 	while (*f->line)
@@ -382,11 +382,11 @@ static void	ft_filling_matrix(t_file *f, int k, int i, int j)
 		{
 			f->map[i][j] = 0;
 			f->dir = f->buff[k];
-			ft_cast_init_dir(f);
 			f->pos[0] = i;
-			f->ml.pos.x = i;
+			f->ml.pos.x = i + 0.5;
 			f->pos[1] = j;
-			f->ml.pos.y = j;
+			f->ml.pos.y = j + 0.5;
+			ft_cast_init_dir(f);
 		}
 	}
 }
@@ -417,6 +417,8 @@ int			alloc_map(t_file *f)
 			i[0]++;
 		}
 	}
+	if (f->dir == '\0')
+		ft_handle_error("MAP ERROR: no DIR BITCH\n");
 	return (0);
 }
 

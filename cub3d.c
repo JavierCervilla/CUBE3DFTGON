@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <jcervill@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 02:56:54 by dgomez            #+#    #+#             */
-/*   Updated: 2020/07/11 19:08:05 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/14 00:12:33 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ void	ft_init_mlx_struct(t_file *f)
 	f->ml.textx = 0;
 	f->ml.texty = 0;
 	f->ml.textstep = 0.0;
+	// SPRITES
+	
 }
 
 void	ft_handle_error(char *str) //TODO:MODIFICAR STRERR
@@ -134,6 +136,7 @@ int	ft_read(t_file *f)
 			break;
 	}
 	ft_handle_colors(f);
+	ft_init_mlx_struct(f);
 	if (alloc_map(f) != -1)
 		if (ft_map_check(f->pos[0], f->pos[1], f) == -1)
 			ft_handle_error("MAP ERROR.Error al checkear el mapa");
@@ -148,13 +151,15 @@ int	main(/*int argc, char *argv[]*/)
 		ft_handle_error("ERROR.MLX_INIT");
 	if (ft_read(&f) == -1)
 		ft_handle_error("ERROR.Lectura del archivo");
+	
 	if(!(f.ml.window = mlx_new_window(f.ml.mlx, f.w, f.h, "CUB3D")))
 		ft_handle_error("ERROR.MLX_WINDOW");
-	//debugging(&f);
-	//  declarar la imagen y obtener la data de la imagen
+
 	f.ml.frame.img = mlx_new_image(f.ml.mlx, f.w, f.h);
-	f.ml.frame.data = (int*)mlx_get_data_addr(f.ml.frame.img, &f.ml.bitspp, &f.ml.size_line, &f.ml.end);
+	f.ml.frame.data = (int*)mlx_get_data_addr(f.ml.frame.img, &f.ml.bitspp, &f.ml.size_line, &f.ml.end);	
+	ft_init_sp(&f);
 	ft_initraycast(&f);
+	ft_sprite(&f);
 	mlx_hook(f.ml.window, 2, 1, ft_key_press, &f);
 	mlx_hook(f.ml.window, 3, 2, ft_key_release, &f);
 	mlx_loop_hook(f.ml.mlx, ft_move_and_draw, &f);

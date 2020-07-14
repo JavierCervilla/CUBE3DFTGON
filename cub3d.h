@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcervill <jcervill@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 01:34:16 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/11 19:07:31 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/14 01:29:03 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,10 @@
 
 /*-------------CONSTANTES--------------------------*/
 
-# define ROT 0.04
-# define MOV 0.06
-
+# define ROT 0.14
+# define MOV 0.14
+# define V_MOV 0
+# define V_DIV 1
 
 /*-------------ESTRUCTURA IMG----------------------*/
 
@@ -86,8 +87,10 @@ typedef struct		s_vector
 
 typedef struct		s_sprite
 {
-	t_vector		pos;
-	
+	t_vector		pos;						// posicion del sprite en el mapa
+	t_vector		cam_pos;					// posicion del sprite en relacion conm la camara
+	double			distance;					// distancia del sprite con el jugador
+	int				used;						// indica is el sprite ya ha sido pintado
 }					t_sprite;
 
 
@@ -109,6 +112,25 @@ typedef struct		s_mlx
 	t_vector		raylength;					// distancia del rayo
 	t_vector		step;						// ray components -1 if neg +1 if pos
 	t_vector		map;						// cuadro del mapa: X Columnas, Y Filas
+	
+	/*-------SPRITES-------------------*/
+	
+	double			*zbuff;						// buffer profundidad
+	t_sprite		*sp;						// array de estructuras de sprites
+	int				*sp_order;					// array de index ordenados
+	t_vector		transform;					// transform del sprite
+	double			inv_det;					// inversa para transform
+	int				sp_screen_x;
+	int				sp_height;					// altura del sprite
+	int				sp_width;					// ancho del sprite
+	int				start_sp_x;					// draw start x
+	int				start_sp_y;					// draw start y
+	int				end_sp_x;					// draw end x
+	int				end_sp_y;					// draw end y
+	int				tex_x;						// texture x
+	int				tex_y;						// texture y
+	
+	/*----------------------------------*/
 	double			camerax;					// coordenada x en camera
 	int				lineheight;					// altura de la linea a dibujar
 	double			perpwalldist;				// distancia ortogonal
@@ -122,7 +144,6 @@ typedef struct		s_mlx
 												//   [0] NO ./north_texture [1] SO ./south_texture
 												//   [2] WE ./west_texture  [3] EA ./east_texture
 												//	 [4] S textura sprite
-	t_sprite		*sp;						// array de estructuras de sprites
 	int				t_side;						// indice de textura
 	double			wallx;						// punto exacto donde golpea el rayo
 	int				textx;						// columnas dentro de texturas
@@ -169,7 +190,7 @@ typedef struct		s_readfile
 	int				rtn;						//  retorno para funciones, -1 = ERROR
 	int				sprite_num;					//  numero de sprites
 	/*---------------ESTRUCTURAS AUXILIARES-------------------------*/
-	
+	t_sprite		*spr;						// array de estructuras de sprite
 	t_mlx			ml;							// estructura auxiliar para instancias de mlx
 	t_mov			mv;							// estructura auxiliar para los movimientos, cada vez que se genera un evento se crea esta estructura
 	
@@ -209,5 +230,13 @@ void				ft_cast_init_dir(t_file *f);
 int					ft_move_and_draw(t_file *f);
 int					ft_key_press(int key, t_file *f);
 int					ft_key_release(int key, t_file *f);
+
+
+/*
+**	SPRITES
+*/
+
+void				ft_sprite(t_file *f);
+void				ft_init_sp(t_file *f);
 
 #endif
