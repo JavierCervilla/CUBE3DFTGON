@@ -6,7 +6,7 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 01:34:16 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/14 01:29:03 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/17 02:03:56 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,26 @@
 
 # define ROT 0.14
 # define MOV 0.14
-# define V_MOV 0
-# define V_DIV 1
+/*-------------ESTRUCTURA SAVE---------------------*/
+
+typedef struct		s_save
+{
+	unsigned int	file_size;
+	unsigned char	reserved1;
+	unsigned char	reserved2;
+	unsigned int	offset_bits;
+	unsigned int	size_header;
+	unsigned int	width;
+	unsigned int	height;
+	short int		planes;
+	short int		bit_count;
+	unsigned int	compression;
+	unsigned int	image_size;
+	unsigned int	ppm_x;
+	unsigned int	ppm_y;
+	unsigned int	clr_used;
+	unsigned int	clr_important;
+}					t_bmp;
 
 /*-------------ESTRUCTURA IMG----------------------*/
 
@@ -129,7 +147,6 @@ typedef struct		s_mlx
 	int				end_sp_y;					// draw end y
 	int				tex_x;						// texture x
 	int				tex_y;						// texture y
-	
 	/*----------------------------------*/
 	double			camerax;					// coordenada x en camera
 	int				lineheight;					// altura de la linea a dibujar
@@ -176,9 +193,9 @@ typedef struct		s_readfile
 												//   WE ./west_texture [3] EA ./east_textur
 	int				sprite;						//  FD de Spritex.
 	char			*line;						//  Linea leida por el GNL.
-	char			*c_f;						//  Colores suelo hex
+	int				c_f;						//  Colores suelo hex
 	int				cf[3];						//  colores del suelo en formato rgb.
-	char			*c_c;						//  colores del techo en formato hex.
+	int				c_c;						//  colores del techo en formato hex.
 	int				cc[3];
 	int				**map;						//  Matriz de mapa
 	char			dir;						//  orientacion del jugador
@@ -189,11 +206,11 @@ typedef struct		s_readfile
 	char			*buff;						//  Buff auxiliar para guardar el mapa;
 	int				rtn;						//  retorno para funciones, -1 = ERROR
 	int				sprite_num;					//  numero de sprites
+	int				save;						//  flag para guardar
 	/*---------------ESTRUCTURAS AUXILIARES-------------------------*/
 	t_sprite		*spr;						// array de estructuras de sprite
 	t_mlx			ml;							// estructura auxiliar para instancias de mlx
 	t_mov			mv;							// estructura auxiliar para los movimientos, cada vez que se genera un evento se crea esta estructura
-	
 }					t_file;
 
 /*
@@ -208,8 +225,7 @@ void				ft_handle_error(char *str);
 int					ft_handle_textures(t_file *f);
 int					ft_check_extension(char *str);
 int					ft_handle_spritex(t_file *f);
-void				ft_handle_colors(t_file *f);
-int					ft_handle_rgb(t_file *f, int i);
+int					ft_handle_rgb(t_file *f);
 int					alloc_map(t_file *f);
 int					ft_map_check(int row, int col, t_file *f);
 
@@ -218,6 +234,14 @@ int					ft_map_check(int row, int col, t_file *f);
 */
 
 int					ft_initraycast(t_file *f);
+int					ft_exit_game(t_file *f);
+void				ft_init_rc(t_file *f);
+void				ft_fixing_def(t_file *f);
+void				ft_init_mlx_struct(t_file *f);
+void				ft_init_mlx_struct2(t_file *f);
+void				ft_init_file_struct(t_file *f);
+void				ft_init_file_struct2(t_file *f);
+
 
 /*
 ** MOVIMIENTO ARCHIVO: ft_move.c
@@ -230,7 +254,13 @@ void				ft_cast_init_dir(t_file *f);
 int					ft_move_and_draw(t_file *f);
 int					ft_key_press(int key, t_file *f);
 int					ft_key_release(int key, t_file *f);
-
+void				ft_move_l(t_file *f);
+void				ft_move_r(t_file *f);
+void				ft_rot_l(t_file *f, double dirxaux, double planexaux);
+void				ft_rot_r(t_file *f, double dirxaux, double planexaux);
+void				ft_move_dwn(t_file *f);
+void				ft_move_up(t_file *f);
+int					ft_canmove(int x);
 
 /*
 **	SPRITES
@@ -238,5 +268,12 @@ int					ft_key_release(int key, t_file *f);
 
 void				ft_sprite(t_file *f);
 void				ft_init_sp(t_file *f);
+
+/*
+** SAVE
+*/
+
+void				ft_init_bmp_header(t_file *f, t_bmp *bmp);
+void				ft_create_bmp(t_file *f);
 
 #endif

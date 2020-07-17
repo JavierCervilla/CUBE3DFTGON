@@ -6,12 +6,11 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/11 17:53:17 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/14 02:05:59 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/17 01:50:51 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
-
+#include "../../cub3d.h"
 
 int		ft_map_check(int row, int col, t_file *f)
 {
@@ -20,7 +19,8 @@ int		ft_map_check(int row, int col, t_file *f)
 	if (row < 0 || col < 0 || row >= f->nFil || col >= f->nColMax ||
 		f->map[row][col] == 4)
 		return (-1);
-	else if (f->map[row][col] == 3 || f->map[row][col] == 1 || f->map[row][col] == 2)
+	else if (f->map[row][col] == 3 || f->map[row][col] == 1 ||
+		f->map[row][col] == 2)
 		return (0);
 	if (f->map[row][col] == 2)
 		f->map[row][col] = 2;

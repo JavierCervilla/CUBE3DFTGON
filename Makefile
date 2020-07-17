@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dgomez <dgomez@student.42madrid.com>       +#+  +:+       +#+         #
+#    By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/10 01:32:21 by dgomez            #+#    #+#              #
-#    Updated: 2020/03/10 05:57:51 by dgomez           ###   ########.fr        #
+#    Updated: 2020/07/17 02:09:50 by jcervill         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,16 @@ INC_DIR		=	./includes/
 
 PRINTF_DIR 	=	$(INC_DIR)printf/
 
-#MLX_DIR		=	$(INC_DIR)mlx/
+SRC_DIR		=	./src/
+
+READ_DIR	=	$(SRC_DIR)read/
+
+RAYCAST_DIR =	$(SRC_DIR)raycast/
+
 MLX_DIR		=	$(INC_DIR)minilibx-linux/
+
 CC			=	gcc
+
 FLAGS		=	-c -Wall -Wextra -Werror
 
 SRCS		=	$(addprefix $(SRCS_DIR), $(shell find $(SRCS_DIR)\
@@ -40,16 +47,17 @@ $(NAME): #$(OBJECTS)
 	@make -C $(PRINTF_DIR)
 	@make -C $(MLX_DIR)
 	@echo "Compiling objects..."
-	$(CC)  cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR)   -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
+	$(CC)  $(SRC_DIR)*.c $(READ_DIR)ft_*.c $(RAYCAST_DIR)ft_*.c -lftprintf -L $(PRINTF_DIR)   -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
 	#$(CC)  cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -L $(MLX_DIR)libmlx_Linux.a -lmlx   -o  $(NAME)
 	@echo "Done."
 
 
 debug:
-	$(CC) -g cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
+	#$(CC) -g cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
+	$(CC)  -g $(SRC_DIR)*.c $(READ_DIR)ft_*.c $(RAYCAST_DIR)ft_*.c -lftprintf -L $(PRINTF_DIR)   -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
 
 compile:
-	$(CC)  cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
+	$(CC)  $(SRC_DIR)*.c $(READ_DIR)ft_*.c $(RAYCAST_DIR)ft_*.c -lftprintf -L $(PRINTF_DIR)   -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
 
 crun: compile
 	clear
@@ -58,12 +66,13 @@ crun: compile
 clean:
 	@make -C $(PRINTF_DIR) clean
 	@make -C $(MLX_DIR) clean
-	@echo "Cleaning hashcode objects..."
-	@rm -rf $(OBJS_DIR)
+	@echo "Cleaning Cub3d..."
 
 fclean: clean
 	@make -C $(MLX_DIR) clean
 	@make -C $(PRINTF_DIR) fclean
+	@rm -f $(READ_DIR)*.o
+	@rm -f $(RAYCAST_DIR)*.o
 	@rm -f $(NAME)
 	@echo "Cleaning Cub3d..."
 
