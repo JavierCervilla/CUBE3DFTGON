@@ -6,7 +6,7 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 00:30:57 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 01:51:23 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/17 23:39:44 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,16 @@ static int	localisdigit(t_file *f, char **test)
 {
 	int		i;
 	int		j;
-	char	**aux;
 
-	aux = test;
 	i = 0;
 	while (i <= 2)
 	{
 		j = 0;
-		while (aux[i][j])
+		while (test[i][j])
 		{
-			if ((!ft_isdigit(aux[i][j]) && aux[i][j] != ' ') ||
-				(aux[i][j] == ' ' && ft_isdigit(aux[i][j - 1])))
-				return ((f->rtn = -1));
+			if ((!ft_isdigit(test[i][j]) && test[i][j] != ' '))
+				if (j > 0 && (test[i][j] == ' ' && ft_isdigit(test[i][j - 1])))
+					return (f->rtn = -1);
 			j++;
 		}
 		i++;
@@ -37,9 +35,11 @@ static int	localisdigit(t_file *f, char **test)
 
 int			ft_handle_cfloor(t_file *f)
 {
-	char **test;
-	char **test2;
+	char 	**test;
+	char 	**test2;
+	int 	i;
 
+	i = -1;
 	if (*f->line == 'F' && *f->line)
 	{
 		test2 = ft_split(++f->line, ',');
@@ -54,15 +54,20 @@ int			ft_handle_cfloor(t_file *f)
 		if ((f->cf[2] = ft_atoi(test2[2])) >= 0)
 			if (f->cf[2] > 255 || f->cf[2] < 0)
 				return ((f->rtn = -1));
+		while (test2[++i] != NULL)
+			free(test2[i]);
+		free(test2);
 	}
 	return (f->rtn);
 }
 
 int			ft_handle_croof(t_file *f)
 {
-	char **test;
-	char **test2;
+	char	**test;
+	char	**test2;
+	int		i;
 
+	i = -1;
 	if (*f->line == 'C' && *f->line)
 	{
 		test2 = ft_split(++f->line, ',');
@@ -77,6 +82,9 @@ int			ft_handle_croof(t_file *f)
 		if ((f->cc[2] = ft_atoi(test2[2])) >= 0)
 			if (f->cc[2] > 255 || f->cc[2] < 0)
 				return ((f->rtn = -1));
+		while (test2[++i] != NULL)
+			free(test2[i]);
+		free(test2);
 	}
 	return (f->rtn);
 }

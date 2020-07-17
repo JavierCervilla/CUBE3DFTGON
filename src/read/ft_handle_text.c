@@ -6,7 +6,7 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 00:29:52 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 01:50:08 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/17 23:21:10 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int			ft_check_extension(char *str)
 	return (rtn);
 }
 
-int			ft_handle_path_texture(t_file *f, int i)
+int			ft_handle_path_texture(t_file *f, int i) // TODO: REESCRIBIR
 {
 	char	*aux;
 	char	*ext;
@@ -48,12 +48,11 @@ int			ft_handle_path_texture(t_file *f, int i)
 			&f->ml.text[i].size_line, &f->ml.text[i].endian);
 		close(f->texture[i]);
 	}
-	while (*f->line)
-		f->line++;
+	free(aux);
 	return (f->rtn);
 }
 
-int			ft_handle_path_spritex(t_file *f, int i)
+int			ft_handle_path_spritex(t_file *f, int i) // TODO: REESCRIBIR
 {
 	char	*aux;
 	char	*ext;
@@ -77,12 +76,11 @@ int			ft_handle_path_spritex(t_file *f, int i)
 			&f->ml.text[4].size_line, &f->ml.text[4].endian);
 		close(f->sprite);
 	}
-	while (*f->line)
-		f->line++;
+	free(aux);
 	return (f->rtn);
 }
 
-int			ft_handle_textures(t_file *f)
+int			ft_handle_textures(t_file *f) // TODO: REESCRIBIR
 {
 	while (*f->line)
 	{
@@ -104,7 +102,7 @@ int			ft_handle_textures(t_file *f)
 	return (f->rtn);
 }
 
-int			ft_handle_spritex(t_file *f)
+int			ft_handle_spritex(t_file *f) // TODO: REESCRIBIR
 {
 	int i;
 

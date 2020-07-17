@@ -6,7 +6,7 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 02:56:54 by dgomez            #+#    #+#             */
-/*   Updated: 2020/07/17 01:56:14 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/17 23:23:40 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void		ft_check_file(t_file *f, char *file)
 			if ((f->fd = open(file, O_RDONLY)) <= 0)
 				ft_handle_error("ERROR AL ABRIR EL ARCHIVO\n");
 		}
+		free(ext);
 	}
 }
 
@@ -66,7 +67,22 @@ void		ft_check_args(t_file *f, int argc, char *argv[])
 
 int			ft_exit_game(t_file *f)
 {
+	int i = 0;
+	while (i < 5)
+	{
+		mlx_destroy_image(f->ml.mlx, f->ml.text[i].img);
+		f->ml.text[i].img = NULL;
+		i++;
+	}
+	mlx_destroy_image(f->ml.mlx, f->ml.frame.img);
+	f->ml.frame.img = NULL;
 	mlx_destroy_window(f->ml.mlx, f->ml.window);
+	free(f->buff);
+	free(f->ml.zbuff);
+	free(f->map);
+	f->map = NULL;
+	f->buff = NULL;
+	f->ml.zbuff = NULL;
 	exit(0);
 }
 
