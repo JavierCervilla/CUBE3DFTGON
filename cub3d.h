@@ -6,7 +6,7 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/04 01:34:16 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 02:03:56 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/17 02:40:42 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,11 @@ int					ft_handle_spritex(t_file *f);
 int					ft_handle_rgb(t_file *f);
 int					alloc_map(t_file *f);
 int					ft_map_check(int row, int col, t_file *f);
+int					ft_handle_croof(t_file *f);
+int					ft_handle_cfloor(t_file *f);
+int					ft_handle_map_read(t_file *f);
+
+
 
 /*
 ** RAY CASTER ENGINE
@@ -241,7 +246,8 @@ void				ft_init_mlx_struct(t_file *f);
 void				ft_init_mlx_struct2(t_file *f);
 void				ft_init_file_struct(t_file *f);
 void				ft_init_file_struct2(t_file *f);
-
+void				ft_calc_step(t_file *f);
+void				ft_calc_side(t_file *f);
 
 /*
 ** MOVIMIENTO ARCHIVO: ft_move.c
@@ -268,6 +274,7 @@ int					ft_canmove(int x);
 
 void				ft_sprite(t_file *f);
 void				ft_init_sp(t_file *f);
+void				ft_calc_rel_dist(t_file *f);
 
 /*
 ** SAVE

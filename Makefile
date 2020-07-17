@@ -6,11 +6,11 @@
 #    By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/10 01:32:21 by dgomez            #+#    #+#              #
-#    Updated: 2020/07/17 02:09:50 by jcervill         ###   ########.fr        #
+#    Updated: 2020/07/17 02:42:17 by jcervill         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		=	CUBE3D
+NAME		=	cub3D
 
 INC_DIR		=	./includes/
 
@@ -28,36 +28,19 @@ CC			=	gcc
 
 FLAGS		=	-c -Wall -Wextra -Werror
 
-SRCS		=	$(addprefix $(SRCS_DIR), $(shell find $(SRCS_DIR)\
-					-name "*.c" | rev | cut -d '/' -f1 | rev))
-
-#OBJS_DIR	=	./objects/
-#OBJS		=	$(addprefix $(OBJS_DIR), $(shell find $(OBJS_DIR)\
-					-name "*.o" | rev | cut -d '/' -f1 | rev))
-#OBJECTS		=	$(patsubst $(SRCS_DIR)%.c, $(OBJS_DIR)%.o, $(SRCS))
-
 all: $(NAME)
 
-#$(OBJS_DIR)%.o: $(SRCS_DIR)%.c
-##	@mkdir -p $(OBJS_DIR)
-#	@$(CC) $(FLAGS) -I$(SRCS_DIR) -c $< -o $@
-
-$(NAME): #$(OBJECTS)
-	@echo "Adding libft..."
+$(NAME):
 	@make -C $(PRINTF_DIR)
 	@make -C $(MLX_DIR)
-	@echo "Compiling objects..."
-	$(CC)  $(SRC_DIR)*.c $(READ_DIR)ft_*.c $(RAYCAST_DIR)ft_*.c -lftprintf -L $(PRINTF_DIR)   -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
-	#$(CC)  cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -L $(MLX_DIR)libmlx_Linux.a -lmlx   -o  $(NAME)
+	$(CC) $(SRC_DIR)*.c $(READ_DIR)ft_*.c $(RAYCAST_DIR)ft_*.c -lftprintf -L $(PRINTF_DIR)   -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
 	@echo "Done."
 
-
 debug:
-	#$(CC) -g cub3d.c ft_*.c -lftprintf -L $(PRINTF_DIR) -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
-	$(CC)  -g $(SRC_DIR)*.c $(READ_DIR)ft_*.c $(RAYCAST_DIR)ft_*.c -lftprintf -L $(PRINTF_DIR)   -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
+	$(CC) -g $(SRC_DIR)*.c $(READ_DIR)ft_*.c $(RAYCAST_DIR)ft_*.c -lftprintf -L $(PRINTF_DIR)   -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
 
 compile:
-	$(CC)  $(SRC_DIR)*.c $(READ_DIR)ft_*.c $(RAYCAST_DIR)ft_*.c -lftprintf -L $(PRINTF_DIR)   -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
+	$(CC) $(SRC_DIR)*.c $(READ_DIR)ft_*.c $(RAYCAST_DIR)ft_*.c -lftprintf -L $(PRINTF_DIR)   -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
 
 crun: compile
 	clear
