@@ -6,11 +6,11 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 01:03:45 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 01:47:21 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/18 19:02:01 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "../../../cub3d.h"
 
 void		ft_texture_config(t_file *f)
 {
@@ -25,7 +25,7 @@ void		ft_texture_config(t_file *f)
 	if (f->ml.side == 1 && f->ml.ray.y < 0)
 		f->ml.textx = f->ml.text[f->ml.t_side].width - f->ml.textx - 1;
 	f->ml.textstep = 1.0 * f->ml.text[f->ml.t_side].height / f->ml.lineheight;
-	f->ml.textPos = (f->ml.drawStart - f->h / 2 + f->ml.lineheight / 2)
+	f->ml.textpos = (f->ml.drawstart - f->h / 2 + f->ml.lineheight / 2)
 	* f->ml.textstep;
 }
 
@@ -64,16 +64,16 @@ void		ft_draw_line(t_file *f)
 	int color;
 
 	i = 0;
-	while (i < f->ml.drawStart)
+	while (i < f->ml.drawstart)
 	{
 		*(f->ml.frame.data + (i * f->w) + f->ml.x) = f->c_c;
 		i++;
 	}
-	while (i <= f->ml.drawEnd)
+	while (i <= f->ml.drawend)
 	{
-		f->ml.texty = (int)f->ml.textPos &
+		f->ml.texty = (int)f->ml.textpos &
 			(f->ml.text[f->ml.t_side].height - 1);
-		f->ml.textPos += f->ml.textstep;
+		f->ml.textpos += f->ml.textstep;
 		color = f->ml.text[f->ml.t_side].data[f->ml.text[f->ml.t_side].height
 			* f->ml.texty + f->ml.textx];
 		*(f->ml.frame.data + (i * f->w) + f->ml.x) = color;

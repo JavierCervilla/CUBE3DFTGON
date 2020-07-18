@@ -6,11 +6,11 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 00:30:57 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 23:39:44 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/18 18:44:34 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "../../../cub3d.h"
 
 static int	localisdigit(t_file *f, char **test)
 {
@@ -35,42 +35,44 @@ static int	localisdigit(t_file *f, char **test)
 
 int			ft_handle_cfloor(t_file *f)
 {
-	char 	**test;
-	char 	**test2;
-	int 	i;
+	char	**test2;
+	int		i;
 
-	i = -1;
+	i = 0;
 	if (*f->line == 'F' && *f->line)
 	{
 		test2 = ft_split(++f->line, ',');
+		while (test2[i] != NULL)
+			i++;
+		i == 3 ? i = -1 : ft_handle_error_ptr("ERROR:CF, 2 it", (void*)test2);
 		if (localisdigit(f, test2) == -1)
-			ft_handle_error("ERROR: COLOR FLOOR");
+			ft_handle_error_ptr("ERROR: C_FLOOR", (void*)test2);
 		if ((f->cf[0] = ft_atoi(test2[0])) >= 0)
 			if (f->cf[0] > 255 || f->cf[0] < 0)
-				return ((f->rtn = -1));
+				f->rtn = -1;
 		if ((f->cf[1] = ft_atoi(test2[1])) >= 0)
 			if (f->cf[1] > 255 || f->cf[1] < 0)
-				return ((f->rtn = -1));
+				f->rtn = -1;
 		if ((f->cf[2] = ft_atoi(test2[2])) >= 0)
 			if (f->cf[2] > 255 || f->cf[2] < 0)
-				return ((f->rtn = -1));
-		while (test2[++i] != NULL)
-			free(test2[i]);
-		free(test2);
+				f->rtn = -1;
+		ft_free((void*)test2);
 	}
 	return (f->rtn);
 }
 
 int			ft_handle_croof(t_file *f)
 {
-	char	**test;
 	char	**test2;
 	int		i;
 
-	i = -1;
+	i = 0;
 	if (*f->line == 'C' && *f->line)
 	{
 		test2 = ft_split(++f->line, ',');
+		while (test2[i] != NULL)
+			i++;
+		i == 3 ? i = -1 : ft_handle_error_ptr("ERROR: CF, 2 it", (void*)test2);
 		if (localisdigit(f, test2) == -1)
 			ft_handle_error("ERROR: COLOR ROOF");
 		if ((f->cc[0] = ft_atoi(test2[0])) >= 0)
@@ -82,9 +84,7 @@ int			ft_handle_croof(t_file *f)
 		if ((f->cc[2] = ft_atoi(test2[2])) >= 0)
 			if (f->cc[2] > 255 || f->cc[2] < 0)
 				return ((f->rtn = -1));
-		while (test2[++i] != NULL)
-			free(test2[i]);
-		free(test2);
+		ft_free((void*)test2);
 	}
 	return (f->rtn);
 }

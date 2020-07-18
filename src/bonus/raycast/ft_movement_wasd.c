@@ -6,11 +6,11 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 01:08:51 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 01:12:16 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/18 04:34:47 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "../../../cub3d.h"
 
 int		ft_canmove(int x)
 {

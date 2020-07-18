@@ -8,7 +8,7 @@
             "name": "(gdb) Iniciar",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/CUBE3D",
+            "program": "${workspaceFolder}/Cub3D",
             "args": ["tx.cub", "--save"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

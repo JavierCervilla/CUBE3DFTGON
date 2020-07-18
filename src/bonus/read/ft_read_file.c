@@ -6,11 +6,11 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 00:27:15 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 23:15:08 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/18 18:14:56 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "../../../cub3d.h"
 
 /*
 **	ft_read_src_file:
@@ -62,8 +62,8 @@ int			ft_read_src_file2(t_file *f)
 
 int			ft_read(t_file *f)
 {
-	int br;
-	char *line;
+	int		br;
+	char	*line;
 
 	ft_init_file_struct(f);
 	while ((br = get_next_line(f->fd, &line)) >= 0)

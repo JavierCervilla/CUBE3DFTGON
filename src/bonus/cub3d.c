@@ -6,17 +6,11 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 02:56:54 by dgomez            #+#    #+#             */
-/*   Updated: 2020/07/17 23:23:40 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/18 18:34:52 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
-
-void		ft_handle_error(char *str)
-{
-	perror(str);
-	exit(0);
-}
+#include "../../cub3d.h"
 
 void		ft_check_file(t_file *f, char *file)
 {
@@ -67,7 +61,9 @@ void		ft_check_args(t_file *f, int argc, char *argv[])
 
 int			ft_exit_game(t_file *f)
 {
-	int i = 0;
+	int i;
+
+	i = 0;
 	while (i < 5)
 	{
 		mlx_destroy_image(f->ml.mlx, f->ml.text[i].img);
@@ -77,9 +73,15 @@ int			ft_exit_game(t_file *f)
 	mlx_destroy_image(f->ml.mlx, f->ml.frame.img);
 	f->ml.frame.img = NULL;
 	mlx_destroy_window(f->ml.mlx, f->ml.window);
+	if (f->mapreaded == 1)
+	{
+		i = -1;
+		while (f->map[++i] != NULL)
+			free(f->map[i]);
+		free(f->map);
+	}
 	free(f->buff);
 	free(f->ml.zbuff);
-	free(f->map);
 	f->map = NULL;
 	f->buff = NULL;
 	f->ml.zbuff = NULL;

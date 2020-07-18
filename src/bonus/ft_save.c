@@ -6,11 +6,11 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 01:54:39 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 01:54:48 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/18 16:26:15 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
 void		ft_init_bmp_header(t_file *f, t_bmp *bmp)
 {

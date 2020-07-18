@@ -6,27 +6,33 @@
 #    By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/10 01:32:21 by dgomez            #+#    #+#              #
-#    Updated: 2020/07/17 02:42:17 by jcervill         ###   ########.fr        #
+#    Updated: 2020/07/18 18:41:39 by jcervill         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		=	cub3D
+NAME			=	Cub3D
 
-INC_DIR		=	./includes/
+INC_DIR			=	./includes/
 
-PRINTF_DIR 	=	$(INC_DIR)printf/
+PRINTF_DIR 		=	$(INC_DIR)printf/
 
-SRC_DIR		=	./src/
+SRC_DIR			=	./src/mandatory/
 
-READ_DIR	=	$(SRC_DIR)read/
+READ_DIR		=	$(SRC_DIR)read/
 
-RAYCAST_DIR =	$(SRC_DIR)raycast/
+RAYCAST_DIR 	=	$(SRC_DIR)raycast/
 
-MLX_DIR		=	$(INC_DIR)minilibx-linux/
+SRC_DIR_B		=	./src/bonus/
 
-CC			=	gcc
+READ_DIR_B		=	$(SRC_DIR_B)read/
 
-FLAGS		=	-c -Wall -Wextra -Werror
+RAYCAST_DIR_B 	=	$(SRC_DIR_B)raycast/
+
+MLX_DIR			=	$(INC_DIR)minilibx-linux/
+
+CC				=	gcc
+
+FLAGS			=	-c -Wall -Wextra -Werror
 
 all: $(NAME)
 
@@ -58,6 +64,14 @@ fclean: clean
 	@rm -f $(RAYCAST_DIR)*.o
 	@rm -f $(NAME)
 	@echo "Cleaning Cub3d..."
+
+bonus: $(NAME)
+
+	@make -C $(PRINTF_DIR)
+	@make -C $(MLX_DIR)
+	$(CC) $(SRC_DIR_B)*.c $(READ_DIR_B)ft_*.c $(RAYCAST_DIR_B)ft_*.c -lftprintf -L $(PRINTF_DIR) -L$(MLX_DIR) $(MLX_DIR)libmlx.a -lm -lmlx -lXext -lX11 -o  $(NAME)
+	@echo "BONUS Done."
+	
 
 re: fclean all
 

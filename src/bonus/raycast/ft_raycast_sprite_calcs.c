@@ -6,11 +6,11 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 01:17:00 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 01:36:55 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/18 04:35:03 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "../../../cub3d.h"
 
 static void	ft_draw_sprites(t_file *f, int i, int stripe)
 {

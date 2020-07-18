@@ -6,11 +6,11 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 01:15:18 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 01:39:53 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/18 19:00:49 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "../../../cub3d.h"
 
 void		ft_init_sp(t_file *f)
 {
@@ -39,10 +39,10 @@ void		ft_calc_pos(t_file *f)
 
 	i = 0;
 	k = 0;
-	while (i < f->nColMax)
+	while (i < f->ncolmax)
 	{
 		j = 0;
-		while (j < f->nFil)
+		while (j < f->nfil)
 		{
 			if (f->map[j][i] == 2)
 			{

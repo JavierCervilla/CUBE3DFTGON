@@ -1,16 +1,16 @@
-R        900 900     
-NO ./textures/Meme1.xpm
-SO ./textures/Meme2.xpm
+R        1920 1080     
+NO ./textures/42.xpm
+SO ./textures/cl_d.xpm
 WE ./textures/Meme3.xpm
 EA ./textures/Meme4.xpm
 S  ./textures/Meme5.xpm
-F      220,  150,10
-C 225,35,30
+F 175,20,84
+C 27,77,184
 11111111111
-12222222221
-12222222221
-12222222221
-12222222221
-12222222221
-12222E22221
+10000000001
+10000000001
+10002220001
+10002220001
+10000000001
+10000E00001
 11111111111

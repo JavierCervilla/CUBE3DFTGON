@@ -6,11 +6,11 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 00:29:52 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 23:21:10 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/18 17:51:22 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "../../../cub3d.h"
 
 int			ft_check_extension(char *str)
 {
@@ -24,7 +24,7 @@ int			ft_check_extension(char *str)
 	return (rtn);
 }
 
-int			ft_handle_path_texture(t_file *f, int i) // TODO: REESCRIBIR
+int			ft_handle_path_texture(t_file *f, int i)
 {
 	char	*aux;
 	char	*ext;
@@ -34,11 +34,11 @@ int			ft_handle_path_texture(t_file *f, int i) // TODO: REESCRIBIR
 	else if (*(f->line + 1) == '/')
 		aux = ft_strdup(f->line);
 	else
-		ft_handle_error("Path of Texture is invalid\n");
+		f->rtn = 1;
 	if (ft_check_extension((ext = ft_strchr(++aux, '.'))) < 0)
-		ft_handle_error("The extension of Texture file is invalid\n");
+		ft_handle_error_aux("The extension of Texture file is invalid\n", aux);
 	if ((f->texture[i] = open(--aux, O_RDONLY)) < 0)
-		ft_handle_error("Error at opening Texture file\n");
+		ft_handle_error_aux("Error at opening Texture file\n", aux);
 	else
 	{
 		f->ml.text[i].img = mlx_xpm_file_to_image(f->ml.mlx, aux,
@@ -52,7 +52,7 @@ int			ft_handle_path_texture(t_file *f, int i) // TODO: REESCRIBIR
 	return (f->rtn);
 }
 
-int			ft_handle_path_spritex(t_file *f, int i) // TODO: REESCRIBIR
+int			ft_handle_path_spritex(t_file *f, int i)
 {
 	char	*aux;
 	char	*ext;
@@ -80,7 +80,7 @@ int			ft_handle_path_spritex(t_file *f, int i) // TODO: REESCRIBIR
 	return (f->rtn);
 }
 
-int			ft_handle_textures(t_file *f) // TODO: REESCRIBIR
+int			ft_handle_textures(t_file *f)
 {
 	while (*f->line)
 	{
@@ -102,7 +102,7 @@ int			ft_handle_textures(t_file *f) // TODO: REESCRIBIR
 	return (f->rtn);
 }
 
-int			ft_handle_spritex(t_file *f) // TODO: REESCRIBIR
+int			ft_handle_spritex(t_file *f)
 {
 	int i;
 

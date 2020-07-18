@@ -6,11 +6,11 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 01:01:02 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 01:49:17 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/18 04:34:59 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "../../../cub3d.h"
 
 static void		ft_cast_init_dir2(t_file *f)
 {

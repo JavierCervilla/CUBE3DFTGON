@@ -6,11 +6,11 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 01:52:14 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 01:52:45 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/18 19:01:22 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
 void		ft_init_file_struct(t_file *f)
 {
@@ -37,8 +37,8 @@ void		ft_init_file_struct2(t_file *f)
 {
 	f->mapreaded = -1;
 	f->buff = ft_strdup("");
-	f->nFil = 0;
-	f->nColMax = 0;
+	f->nfil = 0;
+	f->ncolmax = 0;
 	f->dir = '\0';
 	f->pos[0] = 0;
 	f->pos[1] = 0;
@@ -61,8 +61,8 @@ void		ft_init_mlx_struct2(t_file *f)
 	f->ml.map.y = 0;
 	f->ml.lineheight = 0;
 	f->ml.perpwalldist = 0;
-	f->ml.drawStart = 0;
-	f->ml.drawEnd = 0;
+	f->ml.drawstart = 0;
+	f->ml.drawend = 0;
 	f->ml.side = 0;
 	f->ml.x = 0;
 	f->ml.t_side = 0;

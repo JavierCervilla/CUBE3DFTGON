@@ -6,11 +6,11 @@
 /*   By: jcervill <jcervill@student.42madrid.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 01:12:43 by jcervill          #+#    #+#             */
-/*   Updated: 2020/07/17 01:13:02 by jcervill         ###   ########.fr       */
+/*   Updated: 2020/07/18 04:34:38 by jcervill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../cub3d.h"
+#include "../../../cub3d.h"
 
 void	ft_rot_r(t_file *f, double dirxaux, double planexaux)
 {
